@@ -1,4 +1,6 @@
 package com.example.data.table
 
-object customer {
+object customer
+{
+
 }
