@@ -10,4 +10,6 @@ object Customer : Table()
     val cust_email = varchar("cust_email",50)
     val cust_password = varchar("cust_password",10)
     val cust_phone = varchar("cust_phone",10)
+
+    override val primaryKey: PrimaryKey = PrimaryKey(cust_id)
 }
