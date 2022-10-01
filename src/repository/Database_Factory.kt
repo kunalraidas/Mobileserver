@@ -1,16 +1,28 @@
 package com.example.repository
 
+import com.example.data.table.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object Database_Factory
 {
     fun  init(){
         Database.connect(hikari())
+
+        transaction {
+            SchemaUtils.create(Admin)
+            SchemaUtils.create(Customer)
+            SchemaUtils.create(Brand)
+            SchemaUtils.create(Category)
+            SchemaUtils.create(Color)
+            SchemaUtils.create(Product)
+            SchemaUtils.create(Product_varient)
+        }
     }
 
       fun hikari() : HikariDataSource
