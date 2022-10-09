@@ -11,15 +11,16 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object Database_Factory
 {
-    fun  init(){
+    fun  init()
+    {
         Database.connect(hikari())
 
         transaction {
-            SchemaUtils.create(Admin)
+           SchemaUtils.create(Admin)
             SchemaUtils.create(Customer)
-            SchemaUtils.create(Brand)
             SchemaUtils.create(Category)
             SchemaUtils.create(Color)
+            SchemaUtils.create(Category)
             SchemaUtils.create(Product)
             SchemaUtils.create(Product_varient)
         }
@@ -30,7 +31,8 @@ object Database_Factory
           val config  = HikariConfig()
           config.driverClassName = "org.postgresql.Driver"
           config.jdbcUrl = "jdbc:postgresql:Mobile_Database?user:postgres&password=12345"
-          config.maximumPoolSize = 5
+          // "jdbc:postgresql:notesdatabase?user=postgres&password=12345"
+          config.maximumPoolSize = 3
           config.isAutoCommit = false
           config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
           config.validate()
