@@ -24,13 +24,14 @@ object Database_Factory
             SchemaUtils.create(Product)
             SchemaUtils.create(Product_varient)
         }
+
     }
 
       fun hikari() : HikariDataSource
       {
           val config  = HikariConfig()
-          config.driverClassName = "org.postgresql.Driver"
-          config.jdbcUrl = "jdbc:postgresql:Mobile_Database?user:postgres&password=12345"
+          config.driverClassName = System.getenv("JDBC_DRIVER")
+          config.jdbcUrl = System.getenv("DATABASE_URL")
           // "jdbc:postgresql:notesdatabase?user=postgres&password=12345"
           config.maximumPoolSize = 3
           config.isAutoCommit = false
