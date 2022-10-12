@@ -16,15 +16,14 @@ object Database_Factory
         Database.connect(hikari())
 
         transaction {
-           SchemaUtils.create(Admin)
-            SchemaUtils.create(Customer)
-            SchemaUtils.create(Category)
-            SchemaUtils.create(Color)
-            SchemaUtils.create(Category)
+           SchemaUtils.create(AdminTable)
+            SchemaUtils.create(CustomerTable)
+            SchemaUtils.create(CategoryTable)
+            SchemaUtils.create(ColorTable)
+            SchemaUtils.create(CategoryTable)
             SchemaUtils.create(Product)
             SchemaUtils.create(Product_varient)
         }
-
     }
 
       fun hikari() : HikariDataSource
