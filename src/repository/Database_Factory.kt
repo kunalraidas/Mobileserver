@@ -22,7 +22,7 @@ object Database_Factory
             SchemaUtils.create(ColorTable)
             SchemaUtils.create(CategoryTable)
             SchemaUtils.create(Product)
-            SchemaUtils.create(Product_varient)
+            SchemaUtils.create(MobileTable)
         }
     }
 
