@@ -2,7 +2,7 @@ package com.example.data.table
 
 import org.jetbrains.exposed.sql.Table
 
-object Product : Table()
+object ProductTable : Table()
 {
     val Product_id = varchar("product_id",10)
     val Product_name = varchar("product_name",50)
