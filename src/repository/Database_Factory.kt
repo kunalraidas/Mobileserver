@@ -17,11 +17,17 @@ object Database_Factory
 
         transaction {
            SchemaUtils.create(AdminTable)
+            SchemaUtils.create(AccessoriesTable)
+            SchemaUtils.create(BrandTable)
+            SchemaUtils.create(CartTable)
             SchemaUtils.create(CustomerTable)
             SchemaUtils.create(CategoryTable)
             SchemaUtils.create(ColorTable)
-            SchemaUtils.create(CategoryTable)
+            SchemaUtils.create(DiscountTables)
             SchemaUtils.create(ProductTable)
+            SchemaUtils.create(PurchaseTable)
+            SchemaUtils.create(StockTable)
+            SchemaUtils.create(SupplierTable)
             SchemaUtils.create(MobileTable)
         }
     }

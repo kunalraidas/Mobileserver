@@ -21,7 +21,7 @@ class AdminRepo
     }
 
     // When Admin Is Already Exists
-    suspend fun findAdminById(adminId : String) = Database_Factory.dbQuery {
+    suspend fun findAdminById(adminId : Int) = Database_Factory.dbQuery {
         AdminTable.select {
             AdminTable.Admin_id.eq(adminId)
         }.map {
@@ -35,7 +35,6 @@ class AdminRepo
         {
             return null
         }
-
         return Admin(
             admin_id = row[AdminTable.Admin_id],
             admin_name = row[AdminTable.Admin_name],
