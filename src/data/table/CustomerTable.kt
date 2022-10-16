@@ -4,13 +4,15 @@ import org.jetbrains.exposed.sql.Table
 
 object CustomerTable : Table()
 {
-    val Cust_id = integer("cust_id").autoIncrement()
-    val Cust_name = varchar("cust_name",50)
-    val Cust_address = varchar("cust_address",100)
-    val Address_pincode = varchar("address_pincode",50)
-    val Cust_email = varchar("cust_email",50)
-    val Cust_password = varchar("cust_password",10)
-    val Cust_phone = varchar("cust_phone",10)
+    val Email = varchar("Email",50)
+    val Password = varchar("Password",30)
+    val First_name = varchar("First_name",30)
+    val Last_name = varchar("Last_name",30)
+    val Phone_no = integer("Phone_no")
+    val Cust_Address = varchar("Cust_Address",100)
+    val Delivery_Address = varchar("Delivery_Address",100)
+    val Pincode = integer("Pincode")
 
-    override val primaryKey: PrimaryKey = PrimaryKey(Cust_id)
+
+    override val primaryKey: PrimaryKey = PrimaryKey(Email)
 }

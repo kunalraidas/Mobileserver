@@ -1,10 +1,12 @@
 package com.example.data.model
 
 data class Registration_Request(
-    val cust_id : String,
-    val cust_name : String,
-    val cust_address : String,
-    val cust_email : String,
-    val cust_password : String,
-    val cust_phone : String
+    val email : String,
+    val password : String,
+    val first_name : String,
+    val last_name : String,
+    val phone_no : Int,
+    val cust_Address : String,
+    val delivery_address : String,
+    val pincode : Int
 )

@@ -1,6 +1,6 @@
 package com.example.data.model
 
-data class Supplier(
+data class supplier(
     val supplier_id : String,
     val company_name : String,
     val supplier_name : String,

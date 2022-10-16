@@ -4,12 +4,13 @@ import org.jetbrains.exposed.sql.Table
 
 object MobileTable : Table()
 {
-    val imei_number = varchar("imei_number",10)
-    val Product_id = reference("product_id",ProductTable.Product_id)
-    val Color_id = reference("color_id",ColorTable.Color_id)
-    val Ram = varchar("ram",10)
-    val Storage = varchar("storage",50)
-//    val Price =
+    val Mobile_id = integer("Mobile_id")
+    val Product_id = reference("Product_id",ProductTable.Product_id)
+    val Color_id = reference("Color_id",ColorTable.Color_id)
+    val Ram = varchar("Ram",30)
+    val Storage = varchar("Storage",30)
+     val Price = float("Price")
 
-    override val primaryKey: PrimaryKey = PrimaryKey(imei_number)
+    override val primaryKey: PrimaryKey = PrimaryKey(Mobile_id)
+
 }

@@ -11,44 +11,45 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object Database_Factory
 {
-    fun  init()
+    fun init()
     {
         Database.connect(hikari())
 
         transaction {
-           SchemaUtils.create(AdminTable)
-            SchemaUtils.create(AccessoriesTable)
-            SchemaUtils.create(BrandTable)
+            SchemaUtils.create(AdminTable)
+           SchemaUtils.create(AccessoriesTable)
             SchemaUtils.create(CartTable)
-            SchemaUtils.create(CustomerTable)
-            SchemaUtils.create(CategoryTable)
             SchemaUtils.create(ColorTable)
+            SchemaUtils.create(CustomerTable)
             SchemaUtils.create(DiscountTables)
+            SchemaUtils.create(IMEI_NO_Table)
+            SchemaUtils.create(InvoiceTable)
+            SchemaUtils.create(MobileTable)
+            SchemaUtils.create(OrderTable)
             SchemaUtils.create(ProductTable)
+            SchemaUtils.create(PaymentTable)
+            SchemaUtils.create(PincodeTable)
             SchemaUtils.create(PurchaseTable)
             SchemaUtils.create(StockTable)
             SchemaUtils.create(SupplierTable)
-            SchemaUtils.create(MobileTable)
         }
     }
 
-      fun hikari() : HikariDataSource
-      {
-          val config  = HikariConfig()
-          config.driverClassName = System.getenv("JDBC_DRIVER")
-          config.jdbcUrl = System.getenv("DATABASE_URL")
-          // "jdbc:postgresql:notesdatabase?user=postgres&password=12345"
-          config.maximumPoolSize = 3
-          config.isAutoCommit = false
-          config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
-          config.validate()
+    fun hikari() : HikariDataSource
+    {
+        val config = HikariConfig()
+        config.driverClassName = System.getenv("JDBC_DRIVER")
+        config.jdbcUrl = System.getenv("DATABASE_URL")
+        config.maximumPoolSize = 3
+        config.isAutoCommit = false
+        config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+        config.validate()
 
-          println("Database Connected")
-          return HikariDataSource(config)
-      }
-
-     suspend fun <T> dbQuery(block : () -> T) : T =
-         withContext(Dispatchers.IO){
-             transaction { block() }
-         }
+        println("Database Connect")
+        return  HikariDataSource(config)
+    }
+    suspend fun <T> dbQuery(block : () -> T) : T =
+        withContext(Dispatchers.IO){
+            transaction { block() }
+        }
 }

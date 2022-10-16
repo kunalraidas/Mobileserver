@@ -1,6 +1,8 @@
 package com.example.data.model
 
-data class Cart(
+data class cart(
     val cart_id : String,
+    val quantity : Int,
+    val total : Int
 
 )
