@@ -1,5 +1,8 @@
 package com.example
 
+import com.example.authentications.JWT_Service
+import com.example.authentications.hash
+import com.example.repository.Customer_Repo
 import com.example.repository.Database_Factory
 import io.ktor.application.*
 import io.ktor.response.*
@@ -19,6 +22,9 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 fun Application.module(testing: Boolean = false) {
 
     Database_Factory.init()
+    val db = Customer_Repo()
+    val jwtService = JWT_Service()
+    val hashFunction = {s : String -> hash(s) }
 
     install(Sessions) {
         cookie<MySession>("MY_SESSION") {

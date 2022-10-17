@@ -1,6 +1,6 @@
 package com.example.data.model
 
-data class customer(
+data class Customer(
      val email : String,
      val password : String,
      val first_name : String,
