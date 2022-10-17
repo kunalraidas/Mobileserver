@@ -6,7 +6,7 @@ object PurchaseTable : Table()
 {
     val Purchase_id = integer("Purchase_id")
     val Product_id = reference("Product_id",ProductTable.Product_id)
-    val Supplier_id = reference("Supplier_id",SupplierTable.Supplier_id)
+    val Supplier_id = reference("Supplier_id",SupplierTable.Supplier_email)
     val Date = varchar("Date",30)
     val Quantity = integer("Quantity")
     val Price = float("Price")

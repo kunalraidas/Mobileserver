@@ -1,4 +1,4 @@
-package com.example.data.model
+package com.example.data.response
 
 data class Simple_Response(
     val success : Boolean,

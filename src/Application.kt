@@ -2,8 +2,10 @@ package com.example
 
 import com.example.authentications.JWT_Service
 import com.example.authentications.hash
+import com.example.data.model.Customer
 import com.example.repository.Customer_Repo
 import com.example.repository.Database_Factory
+import com.example.routes.Customer_Route
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.request.*
@@ -13,6 +15,7 @@ import io.ktor.sessions.*
 import io.ktor.auth.*
 import io.ktor.gson.*
 import io.ktor.features.*
+import io.ktor.locations.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -22,7 +25,7 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 fun Application.module(testing: Boolean = false) {
 
     Database_Factory.init()
-    val db = Customer_Repo()
+    val customerDB = Customer_Repo()
     val jwtService = JWT_Service()
     val hashFunction = {s : String -> hash(s) }
 
@@ -35,6 +38,8 @@ fun Application.module(testing: Boolean = false) {
     install(Authentication) {
     }
 
+    install(Locations)
+
     install(ContentNegotiation) {
         gson {
         }
@@ -45,15 +50,7 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
-        get("customer/{id}") {
-            val id = call.parameters["id"]
-            call.respond("$id")
-        }
-
-        get("customer") {
-            val id = call.request.queryParameters["customer"]
-            call.respond("$id")
-        }
+       Customer_Route(customerDB,jwtService,hashFunction)
 
         route("customers")
         {
