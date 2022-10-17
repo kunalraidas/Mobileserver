@@ -2,8 +2,8 @@ package com.example.routes
 
 import com.example.authentications.JWT_Service
 import com.example.data.model.Customer
-import com.example.data.model.Login_Request
-import com.example.data.model.Registration_Request
+import com.example.data.modals.Login_Request
+import com.example.data.modals.Registration_Request
 import com.example.data.response.Simple_Response
 import com.example.repository.Customer_Repo
 import io.ktor.application.*

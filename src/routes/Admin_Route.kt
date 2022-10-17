@@ -1,2 +1,93 @@
 package com.example.routes
 
+import com.example.authentications.JWT_Service
+import com.example.data.modals.Admin_Login_Request
+import com.example.data.modals.Admin_Register_Request
+import com.example.data.model.Admin
+import com.example.data.response.Simple_Response
+import com.example.repository.Admin_Repo
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.locations.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+
+const val ADMIN_API = "/v1"
+const val ADMIN = "$ADMIN_API/admin"
+const val ADMIN_REGISTER = "$ADMIN/register"
+const val ADMIN_LOGIN = "$ADMIN/login"
+
+@Location(ADMIN_REGISTER)
+class AdminRegisterRoute()
+
+@Location(ADMIN_LOGIN)
+class AdminLoginRoute()
+
+fun Route.Admin_Route(
+    admindb : Admin_Repo,
+    jwtService: JWT_Service,
+    hashFunction : (String) -> String
+){
+    post<AdminRegisterRoute> {
+        val registerRequest =
+            try {
+                call.receive<Admin_Register_Request>()
+            }
+            catch (e:Exception)
+            {
+                call.respond(HttpStatusCode.BadRequest,Simple_Response(false,e.message ?:"some Filed Missing"))
+                return@post
+            }
+
+        try {
+            val admin = Admin(registerRequest.adminName,
+                registerRequest.adminEmail,
+                hashFunction(registerRequest.adminPassword))
+            admindb.addAdmin(admin)
+            call.respond(HttpStatusCode.OK,Simple_Response(true,jwtService.generateAdminToken(admin)))
+        }
+        catch (e:Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,e.message ?: "some Problem Occur"))
+
+        }
+    }
+
+    post<AdminLoginRoute> {
+        val loginRequest =
+            try {
+                call.receive<Admin_Login_Request>()
+            }
+            catch (e:Exception)
+            {
+                call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Missing Some Fields"))
+                return@post
+            }
+        try {
+            val admin = admindb.findAdminByEmail(loginRequest.email)
+
+            if (admin == null)
+            {
+                call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Wrong Email Id"))
+
+            }
+            else
+            {
+                if (admin.admin_password == hashFunction(loginRequest.password))
+                {
+                    call.respond(HttpStatusCode.OK,Simple_Response(true,jwtService.generateAdminToken(admin)))
+                }
+                else
+                {
+                    call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Wrong Password"))
+                }
+            }
+        }
+        catch (e:Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,e.message ?: "Some Problem Occur"))
+        }
+    }
+
+}

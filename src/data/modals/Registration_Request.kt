@@ -1,4 +1,4 @@
-package com.example.data.model
+package com.example.data.modals
 
 data class Registration_Request(
     val email : String,
