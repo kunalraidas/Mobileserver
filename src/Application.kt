@@ -45,11 +45,21 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
-        route("/mobile")
-        {
+        get("customer/{id}") {
+            val id = call.parameters["id"]
+            call.respond("$id")
+        }
 
-            route("/create")
+        get("customer") {
+            val id = call.request.queryParameters["customer"]
+            call.respond("$id")
+        }
+
+        route("customers")
+        {
+            route("create")
             {
+                // localhost:8007/mobile/create
                 post {
                     val body = call.receive<String>()
                     call.respond(body)

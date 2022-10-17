@@ -1,6 +1,6 @@
 package com.example.data.model
 
-data class accessories(
+data class Accessories(
     val access_id : String,
     val price : Float
 )

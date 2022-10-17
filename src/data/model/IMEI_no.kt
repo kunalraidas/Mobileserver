@@ -1,5 +1,5 @@
 package com.example.data.model
 
-data class imei_no(
+data class IMEI_no(
     val imei_no : String
 )

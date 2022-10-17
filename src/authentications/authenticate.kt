@@ -12,4 +12,5 @@ fun hash(password : String) : String
     val hmac = Mac.getInstance("HmacSHA1")
     hmac.init(hmackey)
     return hex(hmac.doFinal(password.toByteArray(Charsets.UTF_8)))
+    
 }

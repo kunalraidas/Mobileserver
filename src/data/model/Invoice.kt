@@ -1,8 +1,6 @@
 package com.example.data.model
 
-import java.sql.Date
-
-data class invoice(
+data class Invoice(
     val invoice_id:String,
     val date : String,
     val discount : Int,

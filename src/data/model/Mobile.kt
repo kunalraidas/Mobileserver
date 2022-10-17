@@ -1,6 +1,6 @@
 package com.example.data.model
 
-data class mobile(
+data class Mobile(
    val mobile_id : Int,
    val ram : String,
    val storage : String,
