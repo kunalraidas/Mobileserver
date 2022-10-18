@@ -3,8 +3,10 @@ package com.example
 import com.example.authentications.JWT_Service
 import com.example.authentications.hash
 import com.example.data.model.Customer
+import com.example.repository.Admin_Repo
 import com.example.repository.Customer_Repo
 import com.example.repository.Database_Factory
+import com.example.routes.Admin_Route
 import com.example.routes.Customer_Route
 import io.ktor.application.*
 import io.ktor.response.*
@@ -26,6 +28,7 @@ fun Application.module(testing: Boolean = false) {
 
     Database_Factory.init()
     val customerDB = Customer_Repo()
+    val adminDB = Admin_Repo()
     val jwtService = JWT_Service()
     val hashFunction = {s : String -> hash(s) }
 
@@ -51,6 +54,7 @@ fun Application.module(testing: Boolean = false) {
         }
 
        Customer_Route(customerDB,jwtService,hashFunction)
+        Admin_Route(adminDB,jwtService,hashFunction)
 
         route("customers")
         {

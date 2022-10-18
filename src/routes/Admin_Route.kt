@@ -30,7 +30,7 @@ fun Route.Admin_Route(
     hashFunction : (String) -> String
 ){
     post<AdminRegisterRoute> {
-        val registerRequest =
+        val RegisterRequest =
             try {
                 call.receive<Admin_Register_Request>()
             }
@@ -41,21 +41,20 @@ fun Route.Admin_Route(
             }
 
         try {
-            val admin = Admin(registerRequest.adminName,
-                registerRequest.adminEmail,
-                hashFunction(registerRequest.adminPassword))
+            val admin = Admin(RegisterRequest.adminName,
+                RegisterRequest.adminEmail,
+                hashFunction(RegisterRequest.adminPassword))
             admindb.addAdmin(admin)
             call.respond(HttpStatusCode.OK,Simple_Response(true,jwtService.generateAdminToken(admin)))
         }
         catch (e:Exception)
         {
             call.respond(HttpStatusCode.Conflict,Simple_Response(false,e.message ?: "some Problem Occur"))
-
         }
     }
 
     post<AdminLoginRoute> {
-        val loginRequest =
+        val LoginRequest =
             try {
                 call.receive<Admin_Login_Request>()
             }
@@ -65,16 +64,15 @@ fun Route.Admin_Route(
                 return@post
             }
         try {
-            val admin = admindb.findAdminByEmail(loginRequest.email)
+            val admin = admindb.findAdminByEmail(LoginRequest.adminEmail)
 
             if (admin == null)
             {
                 call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Wrong Email Id"))
-
             }
             else
             {
-                if (admin.admin_password == hashFunction(loginRequest.password))
+                if (admin.admin_password == hashFunction(LoginRequest.adminPassword))
                 {
                     call.respond(HttpStatusCode.OK,Simple_Response(true,jwtService.generateAdminToken(admin)))
                 }
