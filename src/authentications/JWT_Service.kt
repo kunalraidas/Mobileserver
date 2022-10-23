@@ -26,7 +26,8 @@ class JWT_Service
     fun generateAdminToken(admin: Admin):String
     {
         return JWT.create().withSubject("AdminAuthentication")
-            .withIssuer(issuer).withClaim("Admin_email",admin.admin_email)
+            .withIssuer(issuer)
+            .withClaim("Admin_email",admin.admin_email)
             .sign(algorithm)
     }
 
