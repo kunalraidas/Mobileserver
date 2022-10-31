@@ -9,5 +9,6 @@ object OrderTable : Table()
     val Date = varchar("Date",30)
     val Order_Status = varchar("Order_status",30)
 
+
     override val primaryKey: PrimaryKey = PrimaryKey(Order_id)
 }

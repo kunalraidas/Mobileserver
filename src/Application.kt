@@ -3,9 +3,7 @@ package com.example
 import com.example.authentications.JWT_Service
 import com.example.authentications.hash
 import com.example.data.model.Customer
-import com.example.repository.Admin_Repo
-import com.example.repository.Customer_Repo
-import com.example.repository.Database_Factory
+import com.example.repository.*
 import com.example.routes.Admin_Route
 import com.example.routes.Customer_Route
 import io.ktor.application.*
@@ -29,6 +27,20 @@ fun Application.module(testing: Boolean = false) {
     Database_Factory.init()
     val customerDB = Customer_Repo()
     val adminDB = Admin_Repo()
+    val accessDB = Accessories_Repo()
+    val cartDB = Cart_Repo()
+    val colorDB = Color_Repo()
+    val discountDB = Discount_Repo()
+    val imieDB = IMEI_NO_Repo()
+    val invoiceDB = Invoice_Repo()
+    val mobileDB = Mobile_Repo()
+    val orderDb = Order_Repo()
+    val paymentDB = Payment_Repo()
+    val pincodeDB = Pincode_Repo()
+    val productDB = Product_Repo()
+    val purchaseDB = Purchase_Repo()
+    val stockDB = Stock_Repo()
+    val supplierDB = Supplier_Repo()
     val jwtService = JWT_Service()
     val hashFunction = {s : String -> hash(s) }
 
@@ -53,7 +65,7 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
-       Customer_Route(customerDB,jwtService,hashFunction)
+        Customer_Route(customerDB,jwtService,hashFunction)
         Admin_Route(adminDB,jwtService,hashFunction)
 
         route("customers")

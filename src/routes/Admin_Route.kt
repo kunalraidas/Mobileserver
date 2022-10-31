@@ -74,7 +74,8 @@ fun Route.Admin_Route(
             {
                 if (admin.admin_password == hashFunction(LoginRequest.adminPassword))
                 {
-                    call.respond(HttpStatusCode.OK,Simple_Response(true,jwtService.generateAdminToken(admin)))
+                    call.respond(HttpStatusCode.OK,Simple_Response(true,"Login Successfully"))
+                    // jwtService.generateAdminToken(admin)
                 }
                 else
                 {

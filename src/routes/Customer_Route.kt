@@ -26,12 +26,15 @@ class UserRegisterRoute()
 @Location(LOGIN_REQUEST)
 class UserLoginRoute()
 
+
 fun Route.Customer_Route(
     custDb : Customer_Repo,
     jwtService: JWT_Service,
     hashFunction: (String) -> String
 ){
         post<UserRegisterRoute> {
+
+            // Customer is Register
             val registerRequest =
                 try
                 {
@@ -55,9 +58,19 @@ fun Route.Customer_Route(
             {
                 call.respond(HttpStatusCode.Conflict,Simple_Response(false,e.message ?: "Some Problem Ocuer"))
             }
+
+            // Customer is already Exists
+            val exists = custDb.customerExists(registerRequest.email)
+            if (exists)
+            {
+                call.respond(HttpStatusCode.OK,Simple_Response(false,"This Email Id Is Already Registered"))
+                return@post
+            }
         }
 
         post<UserLoginRoute> {
+
+            // Customer Login
             val loginRequest =
                 try {
                     call.receive<Login_Request>()
@@ -79,7 +92,8 @@ fun Route.Customer_Route(
                 {
                     if (customer.password == hashFunction(loginRequest.password))
                     {
-                        call.respond(HttpStatusCode.OK,Simple_Response(true,jwtService.generateCustomerToken(customer)))
+                        call.respond(HttpStatusCode.OK,Simple_Response(true,"Login Successfully"))
+                        // jwtService.generateCustomerToken(customer)
                     }
                     else
                     {
@@ -92,4 +106,59 @@ fun Route.Customer_Route(
                 call.respond(HttpStatusCode.Conflict,Simple_Response(false,e.message ?: "Some Problem Occur"))
             }
         }
+
+       // Update Customer Profile
+        post("customer/update") {
+            val updateRequest = try {
+                call.receive<Customer>()
+            }
+            catch (e:Exception)
+            {
+                call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Improper User Data"))
+                return@post
+            }
+
+            try {
+                custDb.updateCustomer(updateRequest)
+                call.respond(HttpStatusCode.OK,Simple_Response(true,"Profile Updated"))
+            }
+            catch (e : Exception)
+            {
+                call.respond(HttpStatusCode.Conflict,Simple_Response(false,"$e"))
+            }
+        }
+
+        // Get one  Customer Details
+        get ("customer/get"){
+
+            val email = try {
+                call.request.queryParameters["email"]
+            }
+            catch (e : Exception)
+            {
+                call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Provide Email"))
+                return@get
+            }
+
+            try {
+                val u = custDb.findCustomerByEmail(email!!)
+                call.respond(HttpStatusCode.OK,u!!)
+            }
+            catch (e : Exception)
+            {
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
+    // Get All Customer Detail
+        get("customer/getAll") {
+             try {
+                    val l = custDb.getAllCustomer()
+                    call.respond(HttpStatusCode.OK,l)
+             }
+             catch (e : Exception)
+             {
+                call.respond(HttpStatusCode.NoContent,e.message.toString())
+             }
+        }
 }
+

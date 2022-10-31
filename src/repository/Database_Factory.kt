@@ -18,6 +18,7 @@ object Database_Factory
         transaction {
             SchemaUtils.create(AdminTable)
             SchemaUtils.create(AccessoriesTable)
+            SchemaUtils.create(BrandTable)
             SchemaUtils.create(CartTable)
             SchemaUtils.create(ColorTable)
             SchemaUtils.create(CustomerTable)

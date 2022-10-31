@@ -3,11 +3,11 @@ package com.example.repository
 import com.example.data.model.Customer
 import com.example.data.table.CustomerTable
 import com.example.repository.Database_Factory.dbQuery
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 class Customer_Repo{
+    // AddCustomer
     suspend fun addCustomer(customer: Customer){
         dbQuery {
             CustomerTable.insert { ct->
@@ -23,6 +23,7 @@ class Customer_Repo{
         }
     }
 
+    // Find Customer
     suspend fun findCustomerByEmail(email : String) = dbQuery {
         CustomerTable.select { CustomerTable.Email.eq(email) }
             .map {
@@ -30,12 +31,12 @@ class Customer_Repo{
             .singleOrNull()
     }
 
+    // Customer Details in row
     private fun rowToCustomer(row: ResultRow):Customer?{
         if (row == null)
         {
             return null
         }
-
         return Customer(
             email = row[CustomerTable.Email],
             password = row[CustomerTable.Password],
@@ -48,4 +49,34 @@ class Customer_Repo{
         )
     }
 
+    // Update Customer Details
+    suspend fun updateCustomer(customer: Customer) = dbQuery {
+        CustomerTable.update(where =  { CustomerTable.Email.eq(customer.email)} ){ c->
+            c[CustomerTable.First_name] = customer.first_name
+            c[CustomerTable.Last_name] = customer.last_name
+            c[CustomerTable.Phone_no] = customer.phone_no
+            c[CustomerTable.Cust_Address] = customer.cust_Address
+            c[CustomerTable.Delivery_Address] = customer.delivery_address
+            c[CustomerTable.Pincode] = customer.pincode
+        }
+    }
+
+    // Get All customer
+    suspend fun getAllCustomer() : List<Customer?> = dbQuery {
+        CustomerTable.selectAll().map {
+            rowToCustomer(it)
+        }
+    }
+
+    // Customer is already exist in database
+    suspend fun customerExists(email: String):Boolean{
+        return dbQuery {
+           CustomerTable.select {
+               CustomerTable.Email.eq(email)
+           }.count() == 1L
+        }
+    }
 }
+
+
+
