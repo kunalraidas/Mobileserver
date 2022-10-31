@@ -65,6 +65,39 @@ fun Route.Product_Route(
         }
     }
 
+//    // get One product details
+//    get("product/getOneProduct") {
+//        val id = try {
+//            call.request.queryParameters["id"]
+//        }
+//        catch (e:Exception)
+//        {
+//            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Enter Product Id"))
+//            return@get
+//        }
+//
+//        try {
+//            val productId = productDB.getOneProduct(id)
+//
+//        }
+//        catch (e : Exception)
+//        {
+//
+//        }
+//    }
+
+//    // Get one  Customer Details
+
+//
+//        try {
+//            val u = custDb.findCustomerByEmail(email!!)
+//            call.respond(HttpStatusCode.OK,u!!)
+//        }
+//        catch (e : Exception)
+//        {
+//            call.respond(HttpStatusCode.NotFound)
+//        }
+//    }
 
 
     // Get All Product in database
@@ -77,6 +110,7 @@ fun Route.Product_Route(
         {
             call.respond(HttpStatusCode.NoContent,e.message.toString())
         }
+
     }
 
     // Delete Product Details

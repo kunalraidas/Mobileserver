@@ -9,9 +9,9 @@ object InvoiceTable : Table()
         val Payment_id = reference("Payment_id",PaymentTable.Payment_id)
         val Date = varchar("Date",30)
         val Discount = integer("Discount")
+        val Delivery_Charge = integer("Delivery_Charge")
         // after Discount Count the total price of the product
         val Total_Price = float("Total_Price")
-        val Delivery_Charge = integer("Delivery_Charge")
         val Invoice_Details = varchar("Invoice_Detail",100)
 
 

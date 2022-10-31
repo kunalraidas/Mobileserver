@@ -56,7 +56,7 @@ fun Route.Customer_Route(
             }
             catch (e:Exception)
             {
-                call.respond(HttpStatusCode.Conflict,Simple_Response(false,e.message ?: "Some Problem Ocuer"))
+                call.respond(HttpStatusCode.Conflict,Simple_Response(false,e.message ?: "Some Problem Occur"))
             }
 
             // Customer is already Exists

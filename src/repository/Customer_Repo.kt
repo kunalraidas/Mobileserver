@@ -33,10 +33,6 @@ class Customer_Repo{
 
     // Customer Details in row
     private fun rowToCustomer(row: ResultRow):Customer?{
-        if (row == null)
-        {
-            return null
-        }
         return Customer(
             email = row[CustomerTable.Email],
             password = row[CustomerTable.Password],

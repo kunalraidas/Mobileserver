@@ -28,6 +28,7 @@ fun Application.module(testing: Boolean = false) {
     val customerDB = Customer_Repo()
     val adminDB = Admin_Repo()
     val accessDB = Accessories_Repo()
+    val brandDB = Brand_Repo()
     val cartDB = Cart_Repo()
     val colorDB = Color_Repo()
     val discountDB = Discount_Repo()
@@ -67,6 +68,7 @@ fun Application.module(testing: Boolean = false) {
 
         Customer_Route(customerDB,jwtService,hashFunction)
         Admin_Route(adminDB,jwtService,hashFunction)
+
 
         route("customers")
         {
