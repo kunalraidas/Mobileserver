@@ -82,5 +82,4 @@ fun Route.Supplier_Route(
         }
     }
 
-
 }

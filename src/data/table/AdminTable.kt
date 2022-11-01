@@ -8,5 +8,6 @@ object AdminTable : Table()
     val Admin_email = varchar("admin_email",50)
     val Admin_password = varchar("admin_password",100)
 
+
     override val primaryKey: PrimaryKey = PrimaryKey(Admin_email)
 }
