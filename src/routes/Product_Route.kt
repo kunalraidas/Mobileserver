@@ -27,7 +27,7 @@ fun Route.Product_Route(
 
         try {
             val product = Product(addproduct.product_id,addproduct.product_name,
-            addproduct.product_desc,addproduct.cate_name,addproduct.color)
+            addproduct.product_desc,addproduct.cate_name,addproduct.color,addproduct.brand_id)
             productDB.addproduct(product)
             call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Added"))
         }

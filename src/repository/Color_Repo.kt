@@ -5,6 +5,7 @@ import com.example.data.table.ColorTable
 import com.example.repository.Database_Factory.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 
 class Color_Repo
 {
@@ -18,6 +19,14 @@ class Color_Repo
                 ct[ColorTable.Product_id] = Product_id
             }
         }
+    }
+
+    suspend fun findColorById(id : Int) = dbQuery {
+        ColorTable.select {
+            ColorTable.Color_id.eq(id)
+        }.map {
+            rowToColor(it)
+        }.singleOrNull()
     }
 
     private fun rowToColor(row: ResultRow):Color?

@@ -1,10 +1,9 @@
 package com.example.repository
 
 import com.example.data.model.Color
-import com.example.data.model.Customer
 import com.example.data.model.Product
+import com.example.data.table.BrandTable
 import com.example.data.table.ColorTable
-import com.example.data.table.CustomerTable
 import com.example.data.table.ProductTable
 import com.example.repository.Database_Factory.dbQuery
 import kotlinx.coroutines.CoroutineScope
@@ -22,11 +21,22 @@ class Product_Repo
                 pt[ProductTable.Product_id] = product.product_id
                 pt[ProductTable.Product_name] = product.product_name
                 pt[ProductTable.Product_desc] = product.product_desc
-                pt[ProductTable.Brand_id] = Brand_id
+                pt[ProductTable.Brand_id] = product.brand_id
                 pt[ProductTable.Cate_name] = product.cate_name
+            }
 
+            product.color.forEach()
+            {
+                ColorTable.insert { ct->
+                    ct[ColorTable.Color_id] = it.color_id
+                    ct[ColorTable.Color_name] = it.color_name
+                    ct[ColorTable.Product_Image] = it.product_image
+                    ct[ColorTable.Product_id] = product.product_id
+                }
             }
         }
+
+
     }
 
     suspend fun getOneProduct(id : Int) = dbQuery {
@@ -70,7 +80,8 @@ class Product_Repo
             product_name = row[ProductTable.Product_name],
             product_desc = row[ProductTable.Product_desc],
             cate_name =  row[ProductTable.Cate_name],
-            color = color
+            color = color,
+            brand_id = row[BrandTable.brand_id]
         )
     }
 

@@ -4,9 +4,7 @@ import com.example.authentications.JWT_Service
 import com.example.authentications.hash
 import com.example.data.model.Customer
 import com.example.repository.*
-import com.example.routes.Admin_Route
-import com.example.routes.Customer_Route
-import com.example.routes.Product_Route
+import com.example.routes.*
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.request.*
@@ -70,6 +68,8 @@ fun Application.module(testing: Boolean = false) {
         Customer_Route(customerDB,jwtService,hashFunction)
         Admin_Route(adminDB,jwtService,hashFunction)
         Product_Route(productDB)
+        Colour_Route(colorDB)
+        Brand_Route(brandDB)
 
 
         route("customers")
@@ -82,7 +82,6 @@ fun Application.module(testing: Boolean = false) {
                     call.respond(body)
                 }
             }
-
             delete {
                 val body = call.receive<String>()
                 call.respond(body)
