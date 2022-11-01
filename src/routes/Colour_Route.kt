@@ -13,19 +13,20 @@ import sun.security.ec.CurveDB
 @Suppress("UNREACHABLE_CODE")
 fun Route.Colour_Route(db: Color_Repo){
 
-    post("Colour/add") {
-        val c = try{
+    post("colour/add") {
+        val addColor = try{
             call.receive<Color>()
         }catch (e:Exception){
-            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Some Problem Occur"))
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
             return@post
         }
 
         try {
-            db.addColor(c)
+            val color = Color(addColor.color_id,addColor.color_name,addColor.product_image)
+            db.addColor(color)
             call.respond(HttpStatusCode.OK,Simple_Response(true,"Colour Added Successfully"))
         }catch (e:Exception){
-            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"$e Occured"))
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
 }
