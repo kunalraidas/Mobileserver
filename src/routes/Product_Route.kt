@@ -21,7 +21,7 @@ fun Route.Product_Route(
         }
         catch (e : Exception)
         {
-            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Missing Some Field"))
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
             return@post
         }
 
@@ -65,26 +65,26 @@ fun Route.Product_Route(
         }
     }
 
-//    // get One product details
-//    get("product/getOneProduct") {
-//        val id = try {
-//            call.request.queryParameters["id"]
-//        }
-//        catch (e:Exception)
-//        {
-//            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Enter Product Id"))
-//            return@get
-//        }
-//
-//        try {
-//            val productId = productDB.getOneProduct(id)
-//
-//        }
-//        catch (e : Exception)
-//        {
-//
-//        }
-//    }
+    // get One product details
+    get("product/getOneProduct") {
+        val id = try {
+            call.request.queryParameters["id"]
+        }
+        catch (e:Exception)
+        {
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Enter Product Id"))
+            return@get
+        }
+
+        try {
+           // val productId = productDB.getOneProduct()
+
+        }
+        catch (e : Exception)
+        {
+
+        }
+    }
 
 //    // Get one  Customer Details
 

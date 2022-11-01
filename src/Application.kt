@@ -6,6 +6,7 @@ import com.example.data.model.Customer
 import com.example.repository.*
 import com.example.routes.Admin_Route
 import com.example.routes.Customer_Route
+import com.example.routes.Product_Route
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.request.*
@@ -68,6 +69,7 @@ fun Application.module(testing: Boolean = false) {
 
         Customer_Route(customerDB,jwtService,hashFunction)
         Admin_Route(adminDB,jwtService,hashFunction)
+        Product_Route(productDB)
 
 
         route("customers")

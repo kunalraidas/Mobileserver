@@ -1,11 +1,13 @@
 package com.example.repository
 
 import com.example.data.model.Accessories
+import com.example.data.model.Product
 import com.example.data.table.AccessoriesTable
 import com.example.repository.Database_Factory.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.update
 
 class Accessories_Repo
 {
@@ -36,5 +38,14 @@ class Accessories_Repo
             specification = row[AccessoriesTable.Specification],
             price = row[AccessoriesTable.Price]
         )
+    }
+
+    suspend fun updateAccessories(accessories: Accessories){
+        dbQuery {
+            AccessoriesTable.update(where = {AccessoriesTable.Access_id.eq(accessories.access_id)}) { at->
+                at[AccessoriesTable.Specification] = accessories.specification
+                at[AccessoriesTable.Price] = accessories.price
+            }
+        }
     }
 }
