@@ -2,6 +2,7 @@ package com.example.routes
 
 import com.example.data.model.Product
 import com.example.data.response.Simple_Response
+import com.example.data.table.ProductTable
 import com.example.repository.Product_Repo
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -143,22 +144,24 @@ fun Route.Product_Route(
     // Delete Product Details
     delete("product/delete") {
             val productId = try {
-                call.receive<Product>()
+                call.request.queryParameters["product_id"]?.toInt()
             }
             catch (e : Exception)
             {
-                call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"This Product id is not present in database"))
+                call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
                 return@delete
             }
 
-        try {
-            productDB.deleteProduct(productId)
-            call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Deleted successfully"))
-        }
-        catch (e : Exception)
-        {
-            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"Some Problem Occur"))
-        }
+            try {
+                     val product = productDB.deleteProduct(productId!!)
+                    call.respond(HttpStatusCode.OK,product)
+
+          //        call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Deleted successfully"))
+            }
+             catch (e : Exception)
+             {
+                    call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+             }
     }
 
 }

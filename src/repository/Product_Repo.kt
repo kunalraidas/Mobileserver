@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 
 class Product_Repo
@@ -53,7 +54,6 @@ class Product_Repo
                 }
             }
         }
-
     }
 
     suspend fun getOneProduct(id : Int) = dbQuery {
@@ -193,11 +193,17 @@ class Product_Repo
             }
         }
     }
-    suspend fun deleteProduct(product: Product) : Int
+    suspend fun deleteProduct(product: Int) : Int
     {
        return dbQuery {
-            ProductTable.deleteWhere { ProductTable.Product_id.eq(product.product_id) }
-        }
+           ColorTable.deleteWhere { ColorTable.Product_id.eq(product) }
+
+           MobileTable.deleteWhere {MobileTable.Product_id.eq(product) }
+
+           AccessoriesTable.deleteWhere { AccessoriesTable.Product_id.eq(product) }
+
+           ProductTable.deleteWhere { ProductTable.Product_id.eq(product) }
+       }
     }
 
     suspend fun productExists(id : Int) : Boolean
