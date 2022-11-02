@@ -29,10 +29,6 @@ class Admin_Repo
     }
 
     private fun rowToAdmin(row: ResultRow):Admin?{
-        if(row == null)
-        {
-            return null
-        }
         return Admin(
             admin_name = row[AdminTable.Admin_name],
             admin_email = row[AdminTable.Admin_email],
