@@ -5,6 +5,7 @@ import com.example.data.table.ProductTable
 import com.example.data.table.PurchaseTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 
 class Purchase_Repo
 {
@@ -21,6 +22,14 @@ class Purchase_Repo
         }
     }
 
+    suspend fun findPurchaseId(id : Int) = Database_Factory.dbQuery {
+        PurchaseTable.select {
+            PurchaseTable.Purchase_id.eq(id)
+        }.map {
+            rowToPurchase(it)
+        }.singleOrNull()
+    }
+
     private fun rowToPurchase(row: ResultRow):Purchase?{
         if (row == null)
         {
@@ -33,4 +42,6 @@ class Purchase_Repo
             price = row[PurchaseTable.Price]
         )
     }
+
+
 }

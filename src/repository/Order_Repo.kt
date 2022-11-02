@@ -12,19 +12,19 @@ import org.jetbrains.exposed.sql.ResultRow
 
 class Order_Repo
 {
-    suspend fun addOrder(order: Order)
-    {
-        dbQuery{
+    suspend fun addOrder(order: Order) {
+        dbQuery {
             OrderTable.insert { at ->
-            at[OrderTable.Order_id] = order.order_id
-            at[OrderTable.Cart_id] = order.cart_id
-            at[OrderTable.Date] = order.order_date
-            at[OrderTable.Order_Status] = order.order_status
+                at[OrderTable.Order_id] = order.order_id
+                at[OrderTable.Cart_id] = order.cart_id
+                at[OrderTable.Date] = order.order_date
+                at[OrderTable.Order_Status] = order.order_status
             }
         }
     }
-    suspend fun findOrderByEmail(email : String) =
-        dbQuery{
+
+    suspend fun findOrderByEmail(email: String) =
+        dbQuery {
             OrderTable.select {
                 OrderTable.Email.eq(email)
             }.map {
@@ -32,7 +32,7 @@ class Order_Repo
             }.singleOrNull()
         }
 
-    suspend fun  findOrderByDate(date: String) = Database_Factory.dbQuery {
+    suspend fun findOrderByDate(date: String) = Database_Factory.dbQuery {
         OrderTable.select {
             OrderTable.Date.eq(date)
         }.map {
@@ -40,10 +40,8 @@ class Order_Repo
         }.singleOrNull()
     }
 
-    private fun rowToOrder(row: ResultRow) : Order?
-    {
-        if (row == null)
-        {
+    private fun rowToOrder(row: ResultRow): Order? {
+        if (row == null) {
             return null
         }
         return Order(
@@ -53,24 +51,4 @@ class Order_Repo
             order_status = row[OrderTable.Order_Status]
         )
     }
-// private fun rowToCart(row: ResultRow) : Cart?
-//    {
-//        if (row == null)
-//        {
-//            return null
-//        }
-//
-//        return Cart(
-//            cart_id = row[CartTable.Cart_id],
-//            email = row[CartTable.Email],
-//            product_id = row[CartTable.Product_id],
-//            quentity = row[CartTable.Quentity],
-//            total_price = row[CartTable.TotalPrice]
-//        )
-//    }//
-
-
-
-    }
-// TODO: ORDER INCOMPLETE
-//TODO : SUPPLIER ADD KA RAPO AND ROUTE
+}

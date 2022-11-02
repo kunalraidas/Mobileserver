@@ -126,6 +126,30 @@ fun Route.Product_Route(
         }
     }
 
+    // Get all Mobile Product in database
+    get("product/getAllMobile") {
+        try {
+            val product = productDB.getAllMobile()
+            call.respond(HttpStatusCode.OK,product)
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+    }
+
+    // Get All Accessories in database
+    get("product/getAllAccessories") {
+        try {
+            val access = productDB.getAllAccessories()
+            call.respond(HttpStatusCode.OK,access)
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+    }
+
     // Get All Product in database
     get("product/getAllProduct") {
         try {
@@ -158,8 +182,8 @@ fun Route.Product_Route(
              {
                     call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
              }
+     }
 
-    }
 }
 
 

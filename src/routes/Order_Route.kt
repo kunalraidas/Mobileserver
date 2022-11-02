@@ -2,7 +2,6 @@ package com.example.routes
 
 import com.example.data.model.Order
 import com.example.data.response.Simple_Response
-import com.example.data.table.OrderTable
 import com.example.repository.Order_Repo
 import io.ktor.application.*
 import io.ktor.http.*
@@ -23,7 +22,8 @@ fun Route.Order_Route(
                 return@post
             }
 
-            try {
+            try
+            {
                 val OrderDb = Order(order.order_id,order.cart_id,order.order_date,order.order_status)
                 orderdb.addOrder(OrderDb)
                 call.respond(HttpStatusCode.OK,Simple_Response(true,"Order Successfully"))
