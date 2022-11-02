@@ -2,10 +2,8 @@ package com.example.routes
 
 import com.example.data.model.Product
 import com.example.data.response.Simple_Response
-import com.example.data.table.ProductTable
 import com.example.repository.Product_Repo
 import io.ktor.application.*
-import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -13,7 +11,6 @@ import io.ktor.routing.*
 
 fun Route.Product_Route(
     productDB : Product_Repo
-
 ){
     // Add Product
     post("product/add") {
@@ -66,6 +63,7 @@ fun Route.Product_Route(
         }
     }
 
+    // Get One Mobile Details
     get("product/getOneMobile") {
         val mobile_id = try {
             call.request.queryParameters["id"]?.toInt()
@@ -86,6 +84,7 @@ fun Route.Product_Route(
         }
     }
 
+    // Get One Accessories Details
     get("product/getOneAccessories") {
         val access_id =  try {
             call.request.queryParameters["id"]?.toInt()
@@ -139,31 +138,28 @@ fun Route.Product_Route(
         }
     }
 
-
-
     // Delete Product Details
     delete("product/delete") {
             val productId = try {
-                call.request.queryParameters["product_id"]?.toInt()
+                call.request.queryParameters["id"]?.toInt()
             }
             catch (e : Exception)
             {
                 call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
                 return@delete
             }
-
             try {
                      val product = productDB.deleteProduct(productId!!)
                     call.respond(HttpStatusCode.OK,product)
 
-          //        call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Deleted successfully"))
+                  call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Deleted successfully"))
             }
              catch (e : Exception)
              {
                     call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
              }
-    }
 
+    }
 }
 
 

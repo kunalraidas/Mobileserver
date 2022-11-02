@@ -10,7 +10,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 
 class Product_Repo
@@ -193,9 +192,11 @@ class Product_Repo
             }
         }
     }
+
     suspend fun deleteProduct(product: Int) : Int
     {
        return dbQuery {
+
            ColorTable.deleteWhere { ColorTable.Product_id.eq(product) }
 
            MobileTable.deleteWhere {MobileTable.Product_id.eq(product) }
@@ -203,6 +204,7 @@ class Product_Repo
            AccessoriesTable.deleteWhere { AccessoriesTable.Product_id.eq(product) }
 
            ProductTable.deleteWhere { ProductTable.Product_id.eq(product) }
+
        }
     }
 
@@ -212,6 +214,7 @@ class Product_Repo
             ProductTable.select { ProductTable.Product_id.eq(id) }
         }.count() == 1L
     }
+
 
 }
 
