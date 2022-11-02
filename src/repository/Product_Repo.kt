@@ -67,7 +67,7 @@ class Product_Repo
         MobileTable.select {
             MobileTable.Mobile_id.eq(id)
         }.map {
-
+                rowToMobile(it)
         }.singleOrNull()
     }
 
@@ -75,7 +75,7 @@ class Product_Repo
         AccessoriesTable.select {
             AccessoriesTable.Access_id.eq(id)
         }.map {
-
+            rowToAccessories(it)
         }.singleOrNull()
     }
 
@@ -141,19 +141,13 @@ class Product_Repo
     }
 
     private fun rowToAccessories(row: ResultRow) : Accessories?{
-        if (row == null)
-        {
-            return null
-        }
-        else
-        {
+        if (row == null) { return null }
             return Accessories(
                 access_id = row[AccessoriesTable.Access_id],
                 specification = row[AccessoriesTable.Specification],
                 price = row[AccessoriesTable.Price]
             )
         }
-    }
 
     suspend fun updateProduct(product: Product) {
         dbQuery {
@@ -214,7 +208,5 @@ class Product_Repo
             ProductTable.select { ProductTable.Product_id.eq(id) }
         }.count() == 1L
     }
-
-
 }
 

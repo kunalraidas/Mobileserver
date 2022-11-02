@@ -74,7 +74,7 @@ fun Application.module(testing: Boolean = false) {
         Supplier_Route(supplierDB)
         Order_Route(orderDb)
         Purchase_Route(purchaseDB)
-
+        Pincode_Route(pincodeDB)
 
 
         route("customers")
