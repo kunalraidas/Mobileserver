@@ -72,6 +72,7 @@ fun Application.module(testing: Boolean = false) {
         Brand_Route(brandDB)
         Cart_Route(cartDB)
         Supplier_Route(supplierDB)
+        Order_Route(orderDb)
 
 
         route("customers")
