@@ -17,7 +17,6 @@ class Accessories_Repo
             AccessoriesTable.insert { at->
                 at[AccessoriesTable.Access_id] = accessories.access_id
                 at[AccessoriesTable.Product_id] = Product_id
-                at[AccessoriesTable.Color_id] = Color_id
                 at[AccessoriesTable.Specification] = accessories.specification
             }
         }

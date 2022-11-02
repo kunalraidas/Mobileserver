@@ -1,6 +1,8 @@
 package com.example.repository
 
+import com.example.data.model.Accessories
 import com.example.data.model.Color
+import com.example.data.model.Mobile
 import com.example.data.model.Product
 import com.example.data.table.*
 import com.example.repository.Database_Factory.dbQuery
@@ -54,10 +56,6 @@ class Product_Repo
 
     }
 
-
-
-
-
     suspend fun getOneProduct(id : Int) = dbQuery {
         ProductTable.select {
             ProductTable.Product_id.eq(id)
@@ -66,11 +64,37 @@ class Product_Repo
         }.singleOrNull()
     }
 
+    suspend fun getMobileProductByMobileId(id : Int) = dbQuery {
+        MobileTable.select {
+            MobileTable.Mobile_id.eq(id)
+        }.map {
+
+        }.singleOrNull()
+    }
+
+    suspend fun getAccessoriesProductByAccessId(id : Int) = dbQuery {
+        AccessoriesTable.select {
+            AccessoriesTable.Access_id.eq(id)
+        }.map {
+
+        }.singleOrNull()
+    }
+
     suspend fun getAllProduct() : List<Product?> = dbQuery {
         ProductTable.selectAll().map { rowToProduct(it) }
     }
 
+    suspend fun getAllMobile() : List<Mobile?> = dbQuery {
+        MobileTable.selectAll().map {
+            rowToMobile(it)
+        }
+    }
 
+    suspend fun getAllAccessories() : List<Accessories?> = dbQuery {
+        AccessoriesTable.selectAll().map {
+            rowToAccessories(it)
+        }
+    }
 
     suspend fun getColorByProductId(id :Int) : List<Color> = dbQuery {
         ColorTable.select {
@@ -104,6 +128,34 @@ class Product_Repo
         )
     }
 
+    private fun rowToMobile(row: ResultRow) : Mobile?{
+        if (row  == null)
+        {
+            return null
+        }
+        return Mobile(
+            mobile_id = row[MobileTable.Mobile_id],
+            ram = row[MobileTable.Ram],
+            storage = row[MobileTable.Storage],
+            price = row[MobileTable.Price]
+        )
+    }
+
+    private fun rowToAccessories(row: ResultRow) : Accessories?{
+        if (row == null)
+        {
+            return null
+        }
+        else
+        {
+            return Accessories(
+                access_id = row[AccessoriesTable.Access_id],
+                specification = row[AccessoriesTable.Specification],
+                price = row[AccessoriesTable.Price]
+            )
+        }
+    }
+
     suspend fun updateProduct(product: Product) {
         dbQuery {
             ProductTable.update(where = { ProductTable.Product_id.eq(product.product_id) } ){ pu->
@@ -119,6 +171,24 @@ class Product_Repo
                     ct[ColorTable.Product_id] = product.product_id
                     ct[ColorTable.Color_name] = it.color_name
                     ct[ColorTable.Product_Image] = it.product_image
+                }
+            }
+
+            if (product.Mobile != null)
+            {
+                MobileTable.update(where = {MobileTable.Mobile_id.eq(product.Mobile!!.mobile_id)}) { tj->
+                    tj[MobileTable.Product_id] = product.product_id
+                    tj[MobileTable.Ram] = product.Mobile!!.ram
+                    tj[MobileTable.Storage] = product.Mobile!!.storage
+                    tj[MobileTable.Price] = product.Mobile!!.price
+                }
+            }
+            else
+            {
+                AccessoriesTable.update(where = {AccessoriesTable.Access_id.eq(product.Accessories!!.access_id)}) { dj->
+                    dj[AccessoriesTable.Product_id] = product.product_id
+                    dj[AccessoriesTable.Specification]  = product.Accessories!!.specification
+                    dj[AccessoriesTable.Price] = product.Accessories!!.price
                 }
             }
         }
