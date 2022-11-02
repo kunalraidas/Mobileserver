@@ -65,10 +65,50 @@ fun Route.Product_Route(
         }
     }
 
+    get("product/getOneMobile") {
+        val mobile_id = try {
+            call.request.queryParameters["id"]?.toInt()
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
+            return@get
+        }
+
+        try {
+            val mobile = productDB.getMobileProductByMobileId(mobile_id!!)
+            call.respond(HttpStatusCode.OK,mobile!!)
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+    }
+
+    get("product/getOneAccessories") {
+        val access_id =  try {
+            call.request.queryParameters["id"]?.toInt()
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
+            return@get
+        }
+
+        try {
+            val access = productDB.getAccessoriesProductByAccessId(access_id!!)
+            call.respond(HttpStatusCode.OK,access!!)
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+    }
+
     // get One product details
     get("product/getOneProduct") {
         val id = try {
-            call.request.queryParameters["id"]
+            call.request.queryParameters["id"]?.toInt()
         }
         catch (e:Exception)
         {
@@ -77,28 +117,14 @@ fun Route.Product_Route(
         }
 
         try {
-           // val productId = productDB.getOneProduct()
-
+            val productId = productDB.getOneProduct(id!!)
+            call.respond(HttpStatusCode.OK,productId!!)
         }
         catch (e : Exception)
         {
-
+                call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
-
-//    // Get one  Customer Details
-
-//
-//        try {
-//            val u = custDb.findCustomerByEmail(email!!)
-//            call.respond(HttpStatusCode.OK,u!!)
-//        }
-//        catch (e : Exception)
-//        {
-//            call.respond(HttpStatusCode.NotFound)
-//        }
-//    }
-
 
     // Get All Product in database
     get("product/getAllProduct") {
@@ -110,8 +136,9 @@ fun Route.Product_Route(
         {
             call.respond(HttpStatusCode.NoContent,e.message.toString())
         }
-
     }
+
+
 
     // Delete Product Details
     delete("product/delete") {

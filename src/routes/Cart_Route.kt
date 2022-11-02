@@ -24,10 +24,10 @@ fun Route.Cart_Route(db: Cart_Repo){
 
         try
         {
-            val cart = Cart(addCart.cart_id,addCart.Email,
-                              addCart.product_id,
-                              addCart.quentity,addCart.total_price)
-            db.addItemInCart(cart)
+            val cart = Cart(addCart.cart_id,addCart.email,
+                addCart.product_id,
+                addCart.quentity,addCart.total_price)
+              db.addCartItem(cart)
             call.respond(HttpStatusCode.Conflict,Simple_Response(true,"Cart added successfully"))
         }
         catch (e : Exception){

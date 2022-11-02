@@ -11,6 +11,8 @@ import io.ktor.gson.*
 import io.ktor.features.*
 import kotlin.test.*
 import io.ktor.server.testing.*
+import module
+
 
 class ApplicationTest {
     @Test
@@ -21,5 +23,7 @@ class ApplicationTest {
                 assertEquals("HELLO WORLD!", response.content)
             }
         }
+
+        // module(testing = true)
     }
 }

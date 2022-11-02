@@ -2,42 +2,38 @@ package com.example.repository
 
 import com.example.data.model.Cart
 import com.example.data.table.CartTable
-import com.example.repository.Database_Factory.dbQuery
+import com.example.data.table.CustomerTable
+import com.example.data.table.ProductTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 
-//TODO : complete cart
-class Cart_Repo {
-    suspend fun addItemInCart(cart: Cart)
-    {
-        dbQuery{
+class Cart_Repo
+{
+    suspend fun addCartItem(cart: Cart){
+        Database_Factory.dbQuery {
             CartTable.insert { ct->
                 ct[CartTable.Cart_id] = cart.cart_id
-                ct[CartTable.Email] = Email
-                ct[CartTable.Product_id] = Product_id
+                ct[CartTable.Email] = CustomerTable.Email
+                ct[CartTable.Product_id] = ProductTable.Product_id
                 ct[CartTable.Quentity] = cart.quentity
                 ct[CartTable.TotalPrice] = cart.total_price
             }
         }
     }
-    suspend fun findCartById(id : Int) = dbQuery{
-        CartTable.select {
-            CartTable.Cart_id.eq(id)
-        }.map {
-            rowToCart(it)
-        }.singleOrNull()
-        }
-    }
 
     private fun rowToCart(row: ResultRow) : Cart?
     {
+        if (row == null)
+        {
+            return null
+        }
+
         return Cart(
             cart_id = row[CartTable.Cart_id],
-            quentity = row[CartTable.Quentity],
-            total_price = row[CartTable.TotalPrice],
+            email = row[CartTable.Email],
             product_id = row[CartTable.Product_id],
-            Email = row[CartTable.Email]
+            quentity = row[CartTable.Quentity],
+            total_price = row[CartTable.TotalPrice]
         )
     }
-
+}
