@@ -2,9 +2,7 @@ package com.example.repository
 
 import com.example.data.model.Color
 import com.example.data.model.Product
-import com.example.data.table.BrandTable
-import com.example.data.table.ColorTable
-import com.example.data.table.ProductTable
+import com.example.data.table.*
 import com.example.repository.Database_Factory.dbQuery
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +22,6 @@ class Product_Repo
                 pt[ProductTable.Brand_id] = product.brand_id
                 pt[ProductTable.Cate_name] = product.cate_name
             }
-
             product.color.forEach()
             {
                 ColorTable.insert { ct->
@@ -34,10 +31,32 @@ class Product_Repo
                     ct[ColorTable.Product_id] = product.product_id
                 }
             }
+            if (product.Mobile != null )
+            {
+                MobileTable.insert { mt->
+                        mt[MobileTable.Mobile_id] = product.Mobile!!.mobile_id
+                        mt[MobileTable.Product_id] = product.product_id
+                        mt[MobileTable.Ram] = product.Mobile!!.ram
+                        mt[MobileTable.Storage] = product.Mobile!!.storage
+                        mt[MobileTable.Price] = product.Mobile!!.price
+                }
+            }
+            else
+            {
+                AccessoriesTable.insert { at->
+                    at[AccessoriesTable.Access_id] = product.Accessories!!.access_id
+                    at[AccessoriesTable.Product_id] = product.product_id
+                    at[AccessoriesTable.Specification] = product.Accessories!!.specification
+                    at[AccessoriesTable.Price] = product.Accessories!!.price
+                }
+            }
         }
 
-
     }
+
+
+
+
 
     suspend fun getOneProduct(id : Int) = dbQuery {
         ProductTable.select {

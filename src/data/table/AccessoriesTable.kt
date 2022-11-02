@@ -4,9 +4,8 @@ import org.jetbrains.exposed.sql.Table
 
 object AccessoriesTable : Table()
 {
-     val Access_id  = integer("Access_id")
+     val Access_id  = integer("Access_id").autoIncrement()
      val Product_id = reference("Product_id",ProductTable.Product_id)
-     val Color_id = reference("Color_id",ColorTable.Color_id)
      val Specification = varchar("specification",40)
      val Price = float("Price")
 

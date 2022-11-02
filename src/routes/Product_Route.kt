@@ -68,7 +68,7 @@ fun Route.Product_Route(
     // get One product details
     get("product/getOneProduct") {
         val id = try {
-            call.request.queryParameters["id"]
+            call.request.queryParameters["id"]?.toInt()
         }
         catch (e:Exception)
         {
@@ -77,12 +77,12 @@ fun Route.Product_Route(
         }
 
         try {
-           // val productId = productDB.getOneProduct()
-
+            val productId = productDB.getOneProduct(id!!)
+            call.respond(HttpStatusCode.OK,productId!!)
         }
         catch (e : Exception)
         {
-
+                call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
 

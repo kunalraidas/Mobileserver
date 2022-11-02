@@ -14,7 +14,6 @@ class Mobile_Repo
              MobileTable.insert { mt->
                  mt[MobileTable.Mobile_id] = mobile.mobile_id
                  mt[MobileTable.Product_id] = Product_id
-                 mt[MobileTable.Color_id] = Color_id
                  mt[MobileTable.Ram] = mobile.ram
                  mt[MobileTable.Storage] = mobile.storage
                  mt[MobileTable.Price] = mobile.price
@@ -26,7 +25,7 @@ class Mobile_Repo
         MobileTable.select {
             MobileTable.Mobile_id.eq(id)
         }.map {
-
+            rowToMobile(it)
         }.singleOrNull()
     }
 

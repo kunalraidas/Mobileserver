@@ -6,5 +6,9 @@ data class Product(
     val product_desc : String,
     val cate_name : String,
     val color : List<Color>,
-    val brand_id : Int
+    val brand_id : Int,
+
+    var Mobile : Mobile? = null,
+    var Accessories : Accessories? = null
+
 )
