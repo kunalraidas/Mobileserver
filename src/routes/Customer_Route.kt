@@ -143,12 +143,14 @@ fun Route.Customer_Route(
             try {
                 val u = custDb.findCustomerByEmail(email!!)
                 call.respond(HttpStatusCode.OK,u!!)
+
             }
             catch (e : Exception)
             {
-                call.respond(HttpStatusCode.NotFound)
+                call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
             }
         }
+
     // Get All Customer Detail
         get("customer/getAll") {
              try {

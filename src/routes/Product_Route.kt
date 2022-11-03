@@ -25,7 +25,8 @@ fun Route.Product_Route(
 
         try {
             val product = Product(addproduct.product_id,addproduct.product_name,
-            addproduct.product_desc,addproduct.cate_name,addproduct.color,addproduct.brand_id)
+            addproduct.product_desc,addproduct.cate_name,addproduct.color,addproduct.brand_id,
+            Mobile = addproduct.Mobile, Accessories = addproduct.Accessories)
             productDB.addproduct(product)
             call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Added"))
         }
@@ -105,7 +106,7 @@ fun Route.Product_Route(
         }
     }
 
-    // get One product details
+    // Get One product details
     get("product/getOneProduct") {
         val id = try {
             call.request.queryParameters["id"]?.toInt()
@@ -115,7 +116,6 @@ fun Route.Product_Route(
             call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Enter Product Id"))
             return@get
         }
-
         try {
             val productId = productDB.getOneProduct(id!!)
             call.respond(HttpStatusCode.OK,productId!!)
@@ -174,9 +174,9 @@ fun Route.Product_Route(
             }
             try {
                      val product = productDB.deleteProduct(productId!!)
-                    call.respond(HttpStatusCode.OK,product)
+              //      call.respond(HttpStatusCode.OK,product)
 
-                  call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Deleted successfully"))
+               call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Deleted successfully"))
             }
              catch (e : Exception)
              {

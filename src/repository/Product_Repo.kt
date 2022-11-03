@@ -35,21 +35,27 @@ class Product_Repo
             }
             if (product.Mobile != null )
             {
-                MobileTable.insert { mt->
-                        mt[MobileTable.Mobile_id] = product.Mobile!!.mobile_id
+                product.Mobile.forEach()
+                {
+                         MobileTable.insert { mt->
+                        mt[MobileTable.Mobile_id] = it.mobile_id
                         mt[MobileTable.Product_id] = product.product_id
-                        mt[MobileTable.Ram] = product.Mobile!!.ram
-                        mt[MobileTable.Storage] = product.Mobile!!.storage
-                        mt[MobileTable.Price] = product.Mobile!!.price
+                        mt[MobileTable.Ram] = it.ram
+                        mt[MobileTable.Storage] = it.storage
+                        mt[MobileTable.Price] = it.price
+                    }
                 }
             }
             else
             {
-                AccessoriesTable.insert { at->
-                    at[AccessoriesTable.Access_id] = product.Accessories!!.access_id
-                    at[AccessoriesTable.Product_id] = product.product_id
-                    at[AccessoriesTable.Specification] = product.Accessories!!.specification
-                    at[AccessoriesTable.Price] = product.Accessories!!.price
+                product.Accessories.forEach()
+                {
+                    AccessoriesTable.insert { at->
+                        at[AccessoriesTable.Access_id] = it.access_id
+                        at[AccessoriesTable.Product_id] = product.product_id
+                        at[AccessoriesTable.Specification] = it.specification
+                        at[AccessoriesTable.Price] = it.price
+                    }
                 }
             }
         }
@@ -61,6 +67,30 @@ class Product_Repo
         }.map {
             rowToProduct(it)
         }.singleOrNull()
+    }
+
+    suspend fun getColorByProductId(id :Int) : List<Color> = dbQuery {
+        ColorTable.select {
+            ColorTable.Product_id.eq(id)
+        }.map {
+            rowToColor(it)
+        }
+    }
+
+    suspend fun getMobileByProductId(id : Int) : List<Mobile> = dbQuery {
+        MobileTable.select {
+            MobileTable.Product_id.eq(id)
+        }.map {
+            rowToMobile(it)
+        }
+    }
+
+    suspend fun getAccessByProductId(id : Int) : List<Accessories> = dbQuery {
+        AccessoriesTable.select {
+            AccessoriesTable.Product_id.eq(id)
+        }.map {
+            rowToAccessories(it)
+        }
     }
 
     suspend fun getMobileProductByMobileId(id : Int) = dbQuery {
@@ -95,13 +125,6 @@ class Product_Repo
         }
     }
 
-    suspend fun getColorByProductId(id :Int) : List<Color> = dbQuery {
-        ColorTable.select {
-            ColorTable.Product_id.eq(id)
-        }.map {
-            rowToColor(it)
-        }
-    }
 
     private fun rowToColor(row: ResultRow): Color{
        return Color(
@@ -115,7 +138,17 @@ class Product_Repo
 
         var color = mutableListOf<Color>()
         CoroutineScope(Dispatchers.IO).launch {
-            color = getColorByProductId(row[ColorTable.Product_id]).toMutableList()
+            color = getColorByProductId(row[ProductTable.Product_id]).toMutableList()
+        }
+
+        var mobile = mutableListOf<Mobile>()
+        CoroutineScope(Dispatchers.IO).launch {
+            mobile = getMobileByProductId(row[ProductTable.Product_id]).toMutableList()
+        }
+
+        var access = mutableListOf<Accessories>()
+        CoroutineScope(Dispatchers.IO).launch {
+            access = getAccessByProductId(row[ProductTable.Product_id]).toMutableList()
         }
         return Product(
             product_id = row[ProductTable.Product_id],
@@ -123,25 +156,25 @@ class Product_Repo
             product_desc = row[ProductTable.Product_desc],
             cate_name =  row[ProductTable.Cate_name],
             color = color,
-            brand_id = row[BrandTable.brand_id]
+            brand_id = row[ProductTable.Brand_id],
+            Mobile = mobile,
+            Accessories = access
         )
     }
 
-    private fun rowToMobile(row: ResultRow) : Mobile?{
-        if (row  == null)
-        {
-            return null
-        }
+    private fun rowToMobile(row: ResultRow) : Mobile{
+
         return Mobile(
             mobile_id = row[MobileTable.Mobile_id],
+            product_id = row[MobileTable.Product_id],
             ram = row[MobileTable.Ram],
             storage = row[MobileTable.Storage],
             price = row[MobileTable.Price]
         )
     }
 
-    private fun rowToAccessories(row: ResultRow) : Accessories?{
-        if (row == null) { return null }
+    private fun rowToAccessories(row: ResultRow) : Accessories{
+
             return Accessories(
                 access_id = row[AccessoriesTable.Access_id],
                 specification = row[AccessoriesTable.Specification],
@@ -169,20 +202,19 @@ class Product_Repo
 
             if (product.Mobile != null)
             {
-                MobileTable.update(where = {MobileTable.Mobile_id.eq(product.Mobile!!.mobile_id)}) { tj->
-                    tj[MobileTable.Product_id] = product.product_id
-                    tj[MobileTable.Ram] = product.Mobile!!.ram
-                    tj[MobileTable.Storage] = product.Mobile!!.storage
-                    tj[MobileTable.Price] = product.Mobile!!.price
+                product.Mobile.forEach()
+                {
+                    MobileTable.update(where = {MobileTable.Mobile_id.eq(it.mobile_id)}) { mt->
+                        mt[MobileTable.Product_id] = product.product_id
+                        mt[MobileTable.Ram] = it.ram
+                        mt[MobileTable.Storage] = it.storage
+                        mt[MobileTable.Price] = it.price
+                    }
                 }
             }
             else
             {
-                AccessoriesTable.update(where = {AccessoriesTable.Access_id.eq(product.Accessories!!.access_id)}) { dj->
-                    dj[AccessoriesTable.Product_id] = product.product_id
-                    dj[AccessoriesTable.Specification]  = product.Accessories!!.specification
-                    dj[AccessoriesTable.Price] = product.Accessories!!.price
-                }
+
             }
         }
     }

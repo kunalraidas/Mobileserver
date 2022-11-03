@@ -33,6 +33,7 @@ class Mobile_Repo
     {
         return Mobile(
             mobile_id = row[MobileTable.Mobile_id],
+            product_id = row[MobileTable.Product_id],
             ram = row[MobileTable.Ram],
             storage = row[MobileTable.Storage],
             price = row[MobileTable.Price]

@@ -47,5 +47,4 @@ fun Route.Pincode_Route(
             call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
-
 }
