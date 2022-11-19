@@ -214,7 +214,14 @@ class Product_Repo
             }
             else
             {
-
+                product.Accessories.forEach()
+                {
+                    AccessoriesTable.update(where = {AccessoriesTable.Access_id.eq(it.access_id)}){ at->
+                        at[AccessoriesTable.Product_id] = product.product_id
+                        at[AccessoriesTable.Specification] = it.specification
+                        at[AccessoriesTable.Price] = it.price
+                    }
+                }
             }
         }
     }
