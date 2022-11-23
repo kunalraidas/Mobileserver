@@ -35,7 +35,7 @@ class Product_Repo
             }
             if (product.Mobile != null )
             {
-                product.Mobile.forEach()
+                product.Mobile!!.forEach()
                 {
                          MobileTable.insert { mt->
                         mt[MobileTable.Mobile_id] = it.mobile_id
@@ -48,7 +48,7 @@ class Product_Repo
             }
             else
             {
-                product.Accessories.forEach()
+                product.Accessories?.forEach()
                 {
                     AccessoriesTable.insert { at->
                         at[AccessoriesTable.Access_id] = it.access_id
@@ -202,7 +202,7 @@ class Product_Repo
 
             if (product.Mobile != null)
             {
-                product.Mobile.forEach()
+                product.Mobile!!.forEach()
                 {
                     MobileTable.update(where = {MobileTable.Mobile_id.eq(it.mobile_id)}) { mt->
                         mt[MobileTable.Product_id] = product.product_id
@@ -214,7 +214,14 @@ class Product_Repo
             }
             else
             {
-
+                product.Accessories?.forEach()
+                {
+                    AccessoriesTable.update(where = {AccessoriesTable.Access_id.eq(it.access_id)}){ at->
+                        at[AccessoriesTable.Product_id] = product.product_id
+                        at[AccessoriesTable.Specification] = it.specification
+                        at[AccessoriesTable.Price] = it.price
+                    }
+                }
             }
         }
     }
