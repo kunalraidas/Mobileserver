@@ -2,7 +2,7 @@ package com.example.data.table
 
 import org.jetbrains.exposed.sql.Table
 
-object DiscountTables : Table()
+object DiscountTable : Table()
 {
    val Coupon_code = varchar("coupon_code",20) // integer("discount_id")
     val Discount_perc = varchar("discount_perc",20)

@@ -65,16 +65,20 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
-        Customer_Route(customerDB,jwtService,hashFunction)
         Admin_Route(adminDB,jwtService,hashFunction)
-        Product_Route(productDB)
-        Colour_Route(colorDB)
         Brand_Route(brandDB)
+        Customer_Route(customerDB,jwtService,hashFunction)
+        Colour_Route(colorDB)
         Cart_Route(cartDB)
-        Supplier_Route(supplierDB)
+        Discount_Route(discountDB)
+        IMEINO_Route(imieDB)
         Order_Route(orderDb)
+        Product_Route(productDB)
         Purchase_Route(purchaseDB)
         Pincode_Route(pincodeDB)
+        Supplier_Route(supplierDB)
+
+
 
 
         route("customers")

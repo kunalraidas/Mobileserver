@@ -51,7 +51,7 @@ fun Route.Product_Route(
         }
         catch (e : Exception)
         {
-            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Proper data are not insert in table"))
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
             return@post
         }
         try {

@@ -32,7 +32,7 @@ fun Route.Supplier_Route(
                 supplier.contact_no
             )
             supplierDB.addSupplier(supplier_add)
-            call.respond(HttpStatusCode.OK,Simple_Response(true,"Data Added Successfully"))
+            call.respond(HttpStatusCode.OK,Simple_Response(true,"Supplier Added Successfully"))
         }
         catch (e : Exception)
         {
@@ -56,7 +56,7 @@ fun Route.Supplier_Route(
         }
         catch (e : Exception)
         {
-            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Enter Proper Email id "))
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
             return@get
         }
 
@@ -66,19 +66,19 @@ fun Route.Supplier_Route(
         }
         catch (e : Exception)
         {
-            call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
 
     // Get all Supplier Details
-    get("customer/getAll") {
+    get("supplier/getAll") {
         try {
             val supplierAll =  supplierDB.getAllSupplier()
             call.respond(HttpStatusCode.OK,supplierAll)
         }
         catch(e : Exception)
         {
-            call.respond(HttpStatusCode.NoContent,e.message.toString())
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
 

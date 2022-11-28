@@ -13,7 +13,8 @@ fun Route.Purchase_Route(
     PurchaseDb : Purchase_Repo
 )
 {
-    post("purchase/add") {
+    post("purchase/add")
+    {
         val purchase = try {
             call.receive<Purchase>()
         }
@@ -33,6 +34,43 @@ fun Route.Purchase_Route(
             call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
+
+    get("purchase/get_all_purchase") {
+        try {
+            val purchase = PurchaseDb.getAllPurchase()
+            call.respond(HttpStatusCode.OK,purchase)
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+    }
+
+
+    delete("purchase/delete") {
+        val purchase_id = try {
+            call.request.queryParameters["purchase_id"]?.toInt()
+        }
+
+        catch (e:Exception)
+        {
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
+            return@delete
+        }
+
+        try{
+            val purchase = PurchaseDb.deletePurchase(purchase_id!!)
+            call.respond(HttpStatusCode.OK,Simple_Response(true,"Purchase Deleted"))
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+
+    }
+
+
+
 
 
 }

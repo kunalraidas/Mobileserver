@@ -37,7 +37,7 @@ fun Route.Pincode_Route(
     }
 
     // Get All Pincode
-    get("pincode/getpincode") {
+    get("pincode/get_all_pin_code") {
         try {
             val pincode = pincodeDB.getAllPincode()
             call.respond(HttpStatusCode.OK,pincode)
@@ -47,4 +47,47 @@ fun Route.Pincode_Route(
             call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
+
+
+
+    delete("pincode/delete") {
+        val pincode =  try {
+            call.request.queryParameters["pincode"]?.toInt()
+        }
+        catch (e :Exception)
+        {
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
+            return@delete
+        }
+
+        try {
+            val pin_code = pincodeDB.deletePincode(pincode!!)
+            call.respond(HttpStatusCode.OK,Simple_Response(true,"Pin code deleted"))
+
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+    }
+
+    //    delete("discount/delete") {
+//        val discount = try {
+//            call.request.queryParameters["coupon_code"]
+//        }
+//        catch (e : Exception)
+//        {
+//            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
+//            return@delete
+//        }
+//
+//        try {
+//            val coupon_code = discountDB.deleteDiscount(discount!!)
+//            call.respond(HttpStatusCode.OK,Simple_Response(true,"Coupon Code Deleted"))
+//        }
+//        catch (e : Exception)
+//        {
+//            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+//        }
+//    }
 }

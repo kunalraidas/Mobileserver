@@ -1,11 +1,10 @@
 package com.example.repository
 
+import com.example.data.model.Product
 import com.example.data.model.Purchase
 import com.example.data.table.ProductTable
 import com.example.data.table.PurchaseTable
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 
 class Purchase_Repo
 {
@@ -30,6 +29,15 @@ class Purchase_Repo
         }.singleOrNull()
     }
 
+    suspend fun deletePurchase(id : Int)
+    {
+        return Database_Factory.dbQuery {
+            PurchaseTable.deleteWhere {
+                PurchaseTable.Purchase_id.eq(id)
+            }
+        }
+    }
+
     private fun rowToPurchase(row: ResultRow):Purchase?{
         if (row == null)
         {
@@ -42,6 +50,16 @@ class Purchase_Repo
             price = row[PurchaseTable.Price]
         )
     }
+
+    suspend fun getAllPurchase() : List<Purchase?> = Database_Factory.dbQuery {
+        PurchaseTable.selectAll().map {
+            rowToPurchase(it)
+        }
+    }
+
+//    suspend fun getAllProduct() : List<Product?> = Database_Factory.dbQuery {
+//        ProductTable.selectAll().map { rowToProduct(it) }
+//    }
 
 
 }

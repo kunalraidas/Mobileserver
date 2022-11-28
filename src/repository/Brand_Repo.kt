@@ -1,13 +1,14 @@
 package com.example.repository
 
 import com.example.data.model.Brand
+import com.example.data.model.Discount
+import com.example.data.table.AccessoriesTable
 import com.example.data.table.BrandTable
 import com.example.data.table.CustomerTable
+import com.example.data.table.DiscountTable
 import com.example.repository.Database_Factory.dbQuery
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 
 class Brand_Repo
 {
@@ -27,6 +28,30 @@ class Brand_Repo
             rowToBrand(it)
         }.singleOrNull()
     }
+
+    suspend fun getAllBrandName() : List<Brand?> = dbQuery {
+        BrandTable.selectAll().map {
+            rowToBrand(it)
+        }
+    }
+
+    suspend fun deleteBrandname(id : Int)
+    {
+        return dbQuery {
+            BrandTable.deleteWhere {
+                BrandTable.brand_id.eq(id)
+            }
+        }
+    }
+
+//suspend fun deleteAccessories(id : Int)
+//{
+//    return dbQuery {
+//        AccessoriesTable.deleteWhere{
+//            AccessoriesTable.Access_id.eq(id)
+//        }
+//    }
+//}
 
     private fun rowToBrand(row: ResultRow): Brand?
     {

@@ -54,4 +54,40 @@ fun Route.Brand_Route(
         }
     }
 
+    get("brand/getAll") {
+        try {
+            val brand = brandDb.getAllBrandName()
+            call.respond(HttpStatusCode.OK,brand)
+        }
+        catch (e :Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+    }
+
+
+
+    delete("brand/delete") {
+        val brand = try {
+            call.request.queryParameters["brand_id"]?.toInt()
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
+            return@delete
+        }
+
+        try {
+            val brand_id =brandDb.deleteBrandname(brand!!)
+            call.respond(HttpStatusCode.OK,Simple_Response(true,"Product brand is deleted"))
+
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+    }
+
+
+
 }

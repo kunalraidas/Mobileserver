@@ -22,7 +22,7 @@ object Database_Factory
             SchemaUtils.create(CartTable)
             SchemaUtils.create(ColorTable)
             SchemaUtils.create(CustomerTable)
-            SchemaUtils.create(DiscountTables)
+            SchemaUtils.create(DiscountTable)
             SchemaUtils.create(IMEI_NO_Table)
             SchemaUtils.create(InvoiceTable)
             SchemaUtils.create(MobileTable)

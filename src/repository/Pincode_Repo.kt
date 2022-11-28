@@ -1,13 +1,10 @@
 package com.example.repository
 
-import com.example.data.model.Accessories
+
 import com.example.data.model.Pincode
-import com.example.data.table.AccessoriesTable
+import com.example.repository.Database_Factory.dbQuery
 import com.example.data.table.PincodeTable
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 
 class Pincode_Repo {
     suspend fun addPincode(pincode: Pincode)
@@ -32,6 +29,15 @@ class Pincode_Repo {
     suspend fun getAllPincode() : List<Pincode?> = Database_Factory.dbQuery {
         PincodeTable.selectAll().map {
             rowToPincode(it)
+        }
+    }
+
+    suspend fun deletePincode(pincode : Int)
+    {
+        return dbQuery {
+            PincodeTable.deleteWhere {
+                PincodeTable.Pincode.eq(pincode)
+            }
         }
     }
 

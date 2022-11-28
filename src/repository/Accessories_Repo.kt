@@ -3,11 +3,10 @@ package com.example.repository
 import com.example.data.model.Accessories
 import com.example.data.model.Product
 import com.example.data.table.AccessoriesTable
+import com.example.data.table.DiscountTable
 import com.example.repository.Database_Factory.dbQuery
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 class Accessories_Repo
 {
@@ -47,4 +46,22 @@ class Accessories_Repo
             }
         }
     }
+
+    suspend fun deleteAccessories(id : Int)
+    {
+        return dbQuery {
+            AccessoriesTable.deleteWhere{
+                AccessoriesTable.Access_id.eq(id)
+            }
+        }
+    }
+
+//    suspend fun deleteDiscount(coupon_code : String)
+//    {
+//        return dbQuery {
+//            DiscountTable.deleteWhere {
+//                DiscountTable.Coupon_code.eq(coupon_code)
+//            }
+//        }
+//    }
 }

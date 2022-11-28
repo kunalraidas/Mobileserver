@@ -3,10 +3,7 @@ package com.example.repository
 import com.example.data.model.Supplier
 import com.example.data.table.SupplierTable
 import com.example.repository.Database_Factory.dbQuery
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 
 class Supplier_Repo
 {
@@ -44,6 +41,15 @@ class Supplier_Repo
     suspend fun getAllSupplier() : List<Supplier?> = dbQuery {
         SupplierTable.selectAll().map {
             rowToSupplier(it)
+        }
+    }
+
+    suspend fun deleteSupplier(email: String)
+    {
+        return dbQuery {
+            SupplierTable.deleteWhere {
+                SupplierTable.Supplier_email.eq(email)
+            }
         }
     }
 
