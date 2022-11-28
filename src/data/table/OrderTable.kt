@@ -1,6 +1,5 @@
 package com.example.data.table
 
-import io.ktor.http.*
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.date
 
