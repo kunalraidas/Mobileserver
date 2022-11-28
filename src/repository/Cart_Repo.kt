@@ -52,14 +52,17 @@ class Cart_Repo
         }
     }
 
-
-    private fun rowToCart(row: ResultRow) : Cart?
-    {
-        if (row == null)
-        {
-            return null
+    suspend fun getCart(email: String) : List<Cart> = dbQuery {
+        CartTable.select{
+            CartTable.Email.eq(email)
+        }.map {
+            rowToCart(it)
         }
+    }
 
+
+    private fun rowToCart(row: ResultRow) : Cart
+    {
         return Cart(
             cart_id = row[CartTable.Cart_id],
             email = row[CartTable.Email],
