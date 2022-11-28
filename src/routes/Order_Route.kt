@@ -25,7 +25,7 @@ fun Route.Order_Route(
             try
             {
                 val OrderDb = Order(order.order_id,order.cart_id,order.order_date,order.order_status)
-                orderdb.addOrder(OrderDb)
+              //  orderdb.addOrder(OrderDb)
                 call.respond(HttpStatusCode.OK,Simple_Response(true,"Order Successfully"))
             }
             catch (e: Exception)

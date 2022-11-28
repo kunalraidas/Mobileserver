@@ -1,5 +1,6 @@
 package com.example.repository
 
+import com.example.data.model.Cart
 import com.example.data.model.Order
 import com.example.data.table.OrderTable
 import org.jetbrains.exposed.sql.insert
@@ -12,43 +13,42 @@ import org.jetbrains.exposed.sql.ResultRow
 
 class Order_Repo
 {
-    suspend fun addOrder(order: Order) {
-        dbQuery {
-            OrderTable.insert { at ->
-                at[OrderTable.Order_id] = order.order_id
-                at[OrderTable.Cart_id] = order.cart_id
-                at[OrderTable.Date] = order.order_date
-                at[OrderTable.Order_Status] = order.order_status
-            }
+    suspend fun addOrder(cart : List<Cart>) = dbQuery {
+        val order_id = "order" + System.currentTimeMillis()
+
+        var total = 0.0
+        cart.forEach()
+        {
+            total += it.total_price
         }
     }
 
-    suspend fun findOrderByEmail(email: String) =
-        dbQuery {
-            OrderTable.select {
-                OrderTable.Email.eq(email)
-            }.map {
-                rowToOrder(it)
-            }.singleOrNull()
-        }
+//    suspend fun findOrderByEmail(email: String) =
+//        dbQuery {
+//            OrderTable.select {
+//                OrderTable.Email.eq(email)
+//            }.map {
+//                rowToOrder(it)
+//            }.singleOrNull()
+//        }
 
-    suspend fun findOrderByDate(date: String) = Database_Factory.dbQuery {
-        OrderTable.select {
-            OrderTable.Date.eq(date)
-        }.map {
+//    suspend fun findOrderByDate(date: String) = Database_Factory.dbQuery {
+//        OrderTable.select {
+//            OrderTable.Date.eq(date)
+//        }.map {
+//
+//        }.singleOrNull()
+//    }
 
-        }.singleOrNull()
-    }
+//    private fun rowToOrder(row: ResultRow): Order? {
+//        if (row == null) {
+//            return null
+//        }
+//        return Order(
+//            order_id = row[OrderTable.Order_id],
+//            cart_id = row[OrderTable.Cart_id],
+//            order_date = row[OrderTable.Date],
+//            order_status = row[OrderTable.Order_Status]
+//        )
 
-    private fun rowToOrder(row: ResultRow): Order? {
-        if (row == null) {
-            return null
-        }
-        return Order(
-            order_id = row[OrderTable.Order_id],
-            cart_id = row[OrderTable.Cart_id],
-            order_date = row[OrderTable.Date],
-            order_status = row[OrderTable.Order_Status]
-        )
-    }
 }

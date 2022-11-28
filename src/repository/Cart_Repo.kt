@@ -6,7 +6,6 @@ import com.example.data.table.CartTable
 import com.example.repository.Database_Factory.dbQuery
 import org.jetbrains.exposed.sql.*
 
-
 class Cart_Repo
 {
     suspend fun addtocart(email : String, product: Product, qty : Int) = dbQuery {

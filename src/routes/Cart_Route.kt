@@ -21,11 +21,6 @@ fun Route.Cart_Route(db: Cart_Repo){
             return@post
         }
 
-        val product = try {
-            call.receive<Product>()
-        }catch (e:Exception){
-            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Invaild Product"))
-        }
         val qty = try{
             call.request.queryParameters["qty"]?.toInt()
         }catch (e : Exception){
@@ -33,9 +28,16 @@ fun Route.Cart_Route(db: Cart_Repo){
             return@post
         }
 
+        val product = try {
+            call.receive<Product>()
+        }catch (e:Exception){
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Invaild Product"))
+            return@post
+        }
+
         try{
-            db.addtocart(email!!, product as Product,qty!!)
-            call.respond(HttpStatusCode.OK,Simple_Response(true,"Cart Added SuccesFully"))
+            db.addtocart(email!!,product ,qty!!)
+            call.respond(HttpStatusCode.OK,Simple_Response(true,"Cart Added SuccessFully"))
         }catch (e : Exception){
             call.respond(HttpStatusCode.NotAcceptable,Simple_Response(false,e.message.toString()))
         }
