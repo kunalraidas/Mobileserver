@@ -1,14 +1,10 @@
 package com.example.repository
 
 import com.example.data.model.Brand
-import com.example.data.model.Discount
-import com.example.data.table.AccessoriesTable
 import com.example.data.table.BrandTable
-import com.example.data.table.CustomerTable
-import com.example.data.table.DiscountTable
 import com.example.repository.Database_Factory.dbQuery
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+
 
 class Brand_Repo
 {
@@ -44,15 +40,6 @@ class Brand_Repo
         }
     }
 
-//suspend fun deleteAccessories(id : Int)
-//{
-//    return dbQuery {
-//        AccessoriesTable.deleteWhere{
-//            AccessoriesTable.Access_id.eq(id)
-//        }
-//    }
-//}
-
     private fun rowToBrand(row: ResultRow): Brand?
     {
         return Brand(
@@ -60,13 +47,5 @@ class Brand_Repo
             brand_name =  row[BrandTable.brand_name]
         )
     }
-
-
-//    suspend fun findCustomerByEmail(email : String) = dbQuery {
-//        CustomerTable.select { CustomerTable.Email.eq(email) }
-//            .map {
-//                rowToCustomer(it) }
-//            .singleOrNull()
-//    }
 
 }

@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.Table
 
 object CartTable : Table()
 {
-    val Cart_id = integer("Cart_id")
+    val Cart_id = integer("Cart_id").autoIncrement()
     val Email = reference("Cust_id",CustomerTable.Email)
     val Product_id =  reference("Product_id",ProductTable.Product_id)
     val Quentity = integer("quentity")

@@ -1,25 +1,57 @@
 package com.example.repository
 
 import com.example.data.model.Cart
+import com.example.data.model.Product
 import com.example.data.table.CartTable
-import com.example.data.table.CustomerTable
-import com.example.data.table.ProductTable
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
+import com.example.repository.Database_Factory.dbQuery
+import org.jetbrains.exposed.sql.*
+
 
 class Cart_Repo
 {
-    suspend fun addCartItem(cart: Cart){
-        Database_Factory.dbQuery {
-            CartTable.insert { ct->
-                ct[CartTable.Cart_id] = cart.cart_id
-                ct[CartTable.Email] = CustomerTable.Email
-                ct[CartTable.Product_id] = ProductTable.Product_id
-                ct[CartTable.Quentity] = cart.quentity
-                ct[CartTable.TotalPrice] = cart.total_price
+    suspend fun addtocart(email : String, product: Product, qty : Int) = dbQuery {
+           var p = 0f
+            if (product.Mobile != null)
+            {
+                p = product.Mobile!![0].price
             }
+           else
+            {
+                p = product.Accessories!![0].price
+            }
+
+            CartTable.insert { c->
+                c[CartTable.Email] = email
+                c[CartTable.Product_id] = product.product_id
+                c[CartTable.Quentity] = qty
+                c[CartTable.TotalPrice] = qty * p
+             }
+    }
+
+    suspend fun updateQuentity(email: String, product: Product,qty: Int) = dbQuery {
+        var price = 0f
+        if (product.Mobile != null)
+        {
+            price = product.Mobile!![0].price
+        }
+        else
+        {
+            price = product.Accessories!![0].price
+        }
+
+        CartTable.update(where = {CartTable.Email.eq(email) and CartTable.Product_id.eq(product.product_id)}) { ct->
+            ct[CartTable.Quentity] = qty
+            ct[CartTable.TotalPrice] = qty * price
+        }
+
+    }
+
+    suspend fun  removeCart(cartId : Int) = dbQuery {
+        CartTable.deleteWhere {
+            CartTable.Cart_id.eq(cartId)
         }
     }
+
 
     private fun rowToCart(row: ResultRow) : Cart?
     {
