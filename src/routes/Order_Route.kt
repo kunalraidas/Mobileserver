@@ -24,8 +24,8 @@ fun Route.Order_Route(
 
             try
             {
-                val OrderDb = Order(order.order_id,order.cart_id,order.order_date,order.order_status)
-                orderdb.addOrder(OrderDb)
+               // val OrderDb = Order(order.order_id,order.cart_id,order.order_date,order.order_status)
+            //    orderdb.addOrder(OrderDb)
                 call.respond(HttpStatusCode.OK,Simple_Response(true,"Order Successfully"))
             }
             catch (e: Exception)
@@ -33,6 +33,14 @@ fun Route.Order_Route(
                 call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
             }
         }
+    post("order/findEmail") {
+        val email = try {
+            call.receive<Order>()
+        }catch (e:Exception){
+
+        }
+
+    }
 
 
 }
