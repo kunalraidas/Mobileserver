@@ -1,4 +1,6 @@
 package com.example.repository
 
-class Stock_Repo {
+class Stock_Repo
+{
+
 }
