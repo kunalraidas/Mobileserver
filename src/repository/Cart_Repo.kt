@@ -59,7 +59,6 @@ class Cart_Repo
         }
     }
 
-
     private fun rowToCart(row: ResultRow) : Cart
     {
         return Cart(

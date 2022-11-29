@@ -174,9 +174,8 @@ fun Route.Product_Route(
             }
             try {
                      val product = productDB.deleteProduct(productId!!)
-              //      call.respond(HttpStatusCode.OK,product)
-
-               call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Deleted successfully"))
+                     //      call.respond(HttpStatusCode.OK,product)
+                     call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Deleted successfully"))
             }
              catch (e : Exception)
              {
