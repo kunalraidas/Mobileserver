@@ -4,7 +4,6 @@ import com.example.data.model.Customer
 import com.example.data.table.CustomerTable
 import com.example.repository.Database_Factory.dbQuery
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 class Customer_Repo{
     // AddCustomer
@@ -32,7 +31,11 @@ class Customer_Repo{
     }
 
     // Customer Details in row
-    private fun rowToCustomer(row: ResultRow):Customer?{
+    private fun rowToCustomer(row: ResultRow?):Customer?{
+        if (row == null)
+        {
+            return null
+        }
         return Customer(
             email = row[CustomerTable.Email],
             password = row[CustomerTable.Password],

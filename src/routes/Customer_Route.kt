@@ -80,7 +80,6 @@ fun Route.Customer_Route(
                     call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Missing Some Filed"))
                     return@post
                 }
-
             try {
                 val customer = custDb.findCustomerByEmail(loginRequest.email)
 

@@ -24,7 +24,9 @@ fun Route.Order_Route(
 
             try
             {
-                val OrderDb = Order(order.order_id,order.cart_id,order.order_date,order.order_status)
+                val OrderDb = Order(order.order_id,order.Email,order.cart_id,order.order_date,
+                    order.orderItems,order.quantity,order.trackingUrl,order.orderStatus,order.paymentStatus,
+                order.total,order.discount,order.deliveryCharge,order.totalrecived)
                 //  orderdb.addOrder(OrderDb)
                 call.respond(HttpStatusCode.OK,Simple_Response(true,"Order Successfully"))
             }

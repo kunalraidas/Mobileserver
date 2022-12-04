@@ -12,6 +12,7 @@ import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.sessions.*
 import io.ktor.auth.*
+import io.ktor.auth.jwt.*
 import io.ktor.gson.*
 import io.ktor.features.*
 import io.ktor.locations.*
@@ -51,6 +52,17 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(Authentication) {
+        jwt("jwt")
+        {
+            verifier(jwtService.verifier)
+            realm = "MobileServer"
+            validate {
+                val payload = it.payload
+                val email = payload.getClaim("email").asString()
+                val customer = customerDB.findCustomerByEmail(email)
+                customer
+            }
+        }
     }
 
     install(Locations)
