@@ -26,6 +26,27 @@ class Cart_Repo
                 c[CartTable.TotalPrice] = qty * p
              }
     }
+    suspend fun removeformCart(id: Int) = dbQuery{
+        CartTable.deleteWhere {
+            CartTable.Cart_id.eq(id)
+        }
+    }
+
+    suspend fun getCart(id: Int) = dbQuery{
+        CartTable.select {
+            CartTable.Cart_id.eq(id)
+        }
+    }
+
+    suspend fun UpdateQuentity(id: Int,qty : Int) = dbQuery {
+        CartTable.update(where = { CartTable.Cart_id.eq(id) }){ t ->
+            t[Quentity] = qty
+
+        }
+
+    }
+
+
 
     suspend fun updateQuentity(email: String, product: Product,qty: Int) = dbQuery {
         var price = 0f

@@ -15,6 +15,28 @@ class Order_Repo
 {
     suspend fun addOrder(cart : List<Cart>) = dbQuery {
         val order_id = "order" + System.currentTimeMillis()
+  suspend fun addOrder(items :CartItems,discount :Float,deliveryCharge : Float) = dbQuery {
+
+      val orderId = "order" + System.currentTimeMillis()
+
+      var total = 0.0
+      items.Cart.forEach {
+        total += it.total_price
+      }
+
+
+
+  }
+   /* suspend fun addOrder(order: Order) {
+        dbQuery {
+            OrderTable.insert { at ->
+             //   at[OrderTable.Order_id] = order.order_id
+                at[OrderTable.Cart_id] = order.cart_id
+                at[OrderTable.Date] = order.order_date
+                at[OrderTable.Order_Status] = order.order_status
+            }
+        }
+    }
 
         var total = 0.0
         cart.forEach()

@@ -33,6 +33,14 @@ fun Route.Order_Route(
                 call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
             }
         }
+    post("order/findEmail") {
+        val email = try {
+            call.receive<Order>()
+        }catch (e:Exception){
+
+        }
+
+    }
 
 
 }
