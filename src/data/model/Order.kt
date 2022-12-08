@@ -7,7 +7,7 @@ import java.time.LocalDate
 data class Order(
     val order_id : String,
     val Email : String,
-    val cart_id :  Int,
+//    val cart_id :  Int,
     val order_date : LocalDate,
     val orderItems : List<OrderItem>?= null,
     val quantity : Int? = null,

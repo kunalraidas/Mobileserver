@@ -88,7 +88,9 @@ fun Application.module(testing: Boolean = false) {
         Product_Route(productDB)
         Purchase_Route(purchaseDB)
         Pincode_Route(pincodeDB)
+        Payment_Route(paymentDB)
         Supplier_Route(supplierDB)
+
 
 
 

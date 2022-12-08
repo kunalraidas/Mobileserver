@@ -66,8 +66,6 @@ fun Route.IMEINO_Route(
         }
     }
 
-
-
     // delete imei number
     delete("imei-no/delete") {
         val imei = try {
@@ -88,6 +86,7 @@ fun Route.IMEINO_Route(
             call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
+
 
 }
 

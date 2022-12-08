@@ -26,13 +26,16 @@ object Database_Factory
             SchemaUtils.create(IMEI_NO_Table)
             SchemaUtils.create(InvoiceTable)
             SchemaUtils.create(MobileTable)
+            SchemaUtils.create(Order_Product_table)
             SchemaUtils.create(OrderTable)
+            SchemaUtils.create(OrderUserTable)
             SchemaUtils.create(ProductTable)
             SchemaUtils.create(PaymentTable)
             SchemaUtils.create(PincodeTable)
             SchemaUtils.create(PurchaseTable)
             SchemaUtils.create(StockTable)
             SchemaUtils.create(SupplierTable)
+            SchemaUtils.create(UserInvoiceTable)
         }
     }
 
@@ -49,8 +52,11 @@ object Database_Factory
         println("Database Connect")
         return  HikariDataSource(config)
     }
+
     suspend fun <T> dbQuery(block : () -> T) : T =
         withContext(Dispatchers.IO){
             transaction { block() }
         }
+
+
 }

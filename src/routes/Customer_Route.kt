@@ -142,7 +142,6 @@ fun Route.Customer_Route(
             try {
                 val u = custDb.findCustomerByEmail(email!!)
                 call.respond(HttpStatusCode.OK,u!!)
-
             }
             catch (e : Exception)
             {
@@ -150,7 +149,7 @@ fun Route.Customer_Route(
             }
         }
 
-    // Get All Customer Detail
+       // Get All Customer Detail
         get("customer/getAll") {
              try {
                     val l = custDb.getAllCustomer()

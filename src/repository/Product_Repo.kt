@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 
 
 class Product_Repo
@@ -61,7 +62,9 @@ class Product_Repo
         }
     }
 
-    suspend fun getOneProduct(id : Int) = dbQuery {
+
+
+    fun getOneProduct(id : Int) = transaction {
         ProductTable.select {
             ProductTable.Product_id.eq(id)
         }.map {
@@ -134,7 +137,7 @@ class Product_Repo
        )
     }
 
-    private fun rowToProduct(row: ResultRow) : Product?{
+    private fun rowToProduct(row: ResultRow) : Product{
 
         var color = mutableListOf<Color>()
         CoroutineScope(Dispatchers.IO).launch {
@@ -247,5 +250,7 @@ class Product_Repo
             ProductTable.select { ProductTable.Product_id.eq(id) }
         }.count() == 1L
     }
+
+
 }
 

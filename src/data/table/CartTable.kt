@@ -11,7 +11,6 @@ object CartTable : Table()
     val TotalPrice = float("totalPrice")
 
 
-
     override val primaryKey: PrimaryKey = PrimaryKey(Cart_id)
 
 }

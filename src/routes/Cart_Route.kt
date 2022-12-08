@@ -98,18 +98,18 @@ fun Route.Cart_Route(CartDb: Cart_Repo){
         }
     }
 
-    post("cart/get_cart_by_email") {
+    get("cart/get_cart_by_email") {
             val email  = try {
-                call.parameters.get("email")
+                call.request.queryParameters["email"]!!
             }
             catch (e : Exception)
             {
                 call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
-                return@post
+                return@get
             }
         try {
-            val cart = CartDb.getCart(email!!)
-            call.respond(HttpStatusCode.OK,Simple_Response(true,"Cart Deleted Successfully"))
+            val cart = CartDb.getCart(email)
+          //  call.respond(HttpStatusCode.OK,Simple_Response(true,"Cart Deleted Successfully"))
             call.respond(HttpStatusCode.OK,cart)
         }
         catch (e : Exception)

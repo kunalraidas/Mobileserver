@@ -38,7 +38,7 @@ class Purchase_Repo
         }
     }
 
-    private fun rowToPurchase(row: ResultRow):Purchase?{
+    private fun rowToPurchase(row: ResultRow?):Purchase?{
         if (row == null)
         {
             return null
@@ -56,10 +56,4 @@ class Purchase_Repo
             rowToPurchase(it)
         }
     }
-
-//    suspend fun getAllProduct() : List<Product?> = Database_Factory.dbQuery {
-//        ProductTable.selectAll().map { rowToProduct(it) }
-//    }
-
-
 }

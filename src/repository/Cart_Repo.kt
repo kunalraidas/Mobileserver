@@ -73,7 +73,7 @@ class Cart_Repo
     }
 
     suspend fun getCart(email: String) : List<Cart> = dbQuery {
-        CartTable.select{
+        CartTable.select {
             CartTable.Email.eq(email)
         }.map {
             rowToCart(it)
