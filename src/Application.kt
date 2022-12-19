@@ -27,20 +27,16 @@ fun Application.module(testing: Boolean = false) {
     Database_Factory.init()
     val customerDB = Customer_Repo()
     val adminDB = Admin_Repo()
-    val accessDB = Accessories_Repo()
     val brandDB = Brand_Repo()
     val cartDB = Cart_Repo()
     val colorDB = Color_Repo()
     val discountDB = Discount_Repo()
     val imieDB = IMEI_NO_Repo()
-    val invoiceDB = Invoice_Repo()
-    val mobileDB = Mobile_Repo()
     val orderDb = Order_Repo()
     val paymentDB = Payment_Repo()
     val pincodeDB = Pincode_Repo()
     val productDB = Product_Repo()
     val purchaseDB = Purchase_Repo()
-    val stockDB = Stock_Repo()
     val supplierDB = Supplier_Repo()
     val jwtService = JWT_Service()
     val hashFunction = {s : String -> hash(s) }
@@ -90,9 +86,6 @@ fun Application.module(testing: Boolean = false) {
         Pincode_Route(pincodeDB)
         Payment_Route(paymentDB)
         Supplier_Route(supplierDB)
-
-
-
 
 
         route("customers")

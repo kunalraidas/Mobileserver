@@ -40,6 +40,8 @@ class Brand_Repo
         }
     }
 
+
+
     private fun rowToBrand(row: ResultRow): Brand?
     {
         return Brand(
