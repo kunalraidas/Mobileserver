@@ -1,6 +1,6 @@
 package com.example.routes
 
-import com.example.data.model.Color
+import com.example.data.model.ProductColor
 import com.example.data.response.Simple_Response
 import com.example.repository.Color_Repo
 import io.ktor.application.*
@@ -13,19 +13,20 @@ import io.ktor.routing.*
 fun Route.Colour_Route(db: Color_Repo){
 
     post("colour/add") {
-        val addColor = try
+        val addProductColor = try
         {
-            call.receive<Color>()
+            call.receive<ProductColor>()
         }
         catch (e:Exception)
+
         {
             call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
             return@post
         }
         try
         {
-            val color = Color(addColor.color_id,addColor.color_name,addColor.product_image)
-            db.addColor(color)
+            val productColor = ProductColor(addProductColor.color_id,addProductColor.color_name,addProductColor.product_image)
+            db.addColor(productColor)
             call.respond(HttpStatusCode.OK,Simple_Response(true,"Colour Added Successfully"))
         }
         catch (e:Exception){

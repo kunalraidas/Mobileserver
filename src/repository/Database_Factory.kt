@@ -19,6 +19,7 @@ object Database_Factory
             SchemaUtils.create(AdminTable)
             SchemaUtils.create(AccessoriesTable)
             SchemaUtils.create(BrandTable)
+            SchemaUtils.create(CategoryTable)
             SchemaUtils.create(CartTable)
             SchemaUtils.create(ColorTable)
             SchemaUtils.create(CustomerTable)
@@ -57,6 +58,5 @@ object Database_Factory
         withContext(Dispatchers.IO){
             transaction { block() }
         }
-
 
 }

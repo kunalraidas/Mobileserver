@@ -1,7 +1,7 @@
 package com.example.repository
 
 import com.example.data.model.Accessories
-import com.example.data.model.Color
+import com.example.data.model.ProductColor
 import com.example.data.model.Mobile
 import com.example.data.model.Product
 import com.example.data.table.*
@@ -25,10 +25,10 @@ class Product_Repo
                 pt[ProductTable.Brand_id] = product.brand_id
                 pt[ProductTable.Cate_name] = product.cate_name
             }
-            product.color.forEach()
+            product.productColor.forEach()
             {
                 ColorTable.insert { ct->
-                    ct[ColorTable.Color_id] = it.color_id
+//                    ct[ColorTable.Color_id] = it.color_id
                     ct[ColorTable.Color_name] = it.color_name
                     ct[ColorTable.Product_Image] = it.product_image
                     ct[ColorTable.Product_id] = product.product_id
@@ -72,7 +72,7 @@ class Product_Repo
         }.singleOrNull()
     }
 
-    suspend fun getColorByProductId(id :Int) : List<Color> = dbQuery {
+    suspend fun getColorByProductId(id :Int) : List<ProductColor> = dbQuery {
         ColorTable.select {
             ColorTable.Product_id.eq(id)
         }.map {
@@ -129,8 +129,8 @@ class Product_Repo
     }
 
 
-    private fun rowToColor(row: ResultRow): Color{
-       return Color(
+    private fun rowToColor(row: ResultRow): ProductColor{
+       return ProductColor(
            color_id = row[ColorTable.Color_id],
            color_name = row[ColorTable.Color_name],
            product_image = row[ColorTable.Product_Image]
@@ -139,9 +139,9 @@ class Product_Repo
 
     private fun rowToProduct(row: ResultRow) : Product{
 
-        var color = mutableListOf<Color>()
+        var productColor = mutableListOf<ProductColor>()
         CoroutineScope(Dispatchers.IO).launch {
-            color = getColorByProductId(row[ProductTable.Product_id]).toMutableList()
+            productColor = getColorByProductId(row[ProductTable.Product_id]).toMutableList()
         }
 
         var mobile = mutableListOf<Mobile>()
@@ -158,7 +158,7 @@ class Product_Repo
             product_name = row[ProductTable.Product_name],
             product_desc = row[ProductTable.Product_desc],
             cate_name =  row[ProductTable.Cate_name],
-            color = color,
+            productColor = productColor,
             brand_id = row[ProductTable.Brand_id],
             Mobile = mobile,
             Accessories = access
@@ -194,7 +194,7 @@ class Product_Repo
                 pu[ProductTable.Cate_name] = product.cate_name
             }
 
-            product.color.forEach()
+            product.productColor.forEach()
             {
                 ColorTable.update(where = {ColorTable.Color_id.eq(it.color_id)}) { ct->
                     ct[ColorTable.Product_id] = product.product_id
@@ -244,12 +244,9 @@ class Product_Repo
        }
     }
 
-    suspend fun productExists(id : Int) : Boolean
-    {
-        return dbQuery {
-            ProductTable.select { ProductTable.Product_id.eq(id) }
-        }.count() == 1L
-    }
+    suspend fun productExists(id : Int) = dbQuery {
+            ProductTable.select { ProductTable.Product_id.eq(id) }.count() == 1L
+        }
 
 
 }

@@ -5,16 +5,18 @@ import com.example.data.response.Simple_Response
 import com.example.repository.Product_Repo
 import io.ktor.application.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import java.io.File
 
 fun Route.Product_Route(
     productDB : Product_Repo
 ){
     // Add Product
     post("product/add") {
-        val addproduct = try {
+        val add_product = try {
             call.receive<Product>()
         }
         catch (e : Exception)
@@ -22,26 +24,27 @@ fun Route.Product_Route(
             call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
             return@post
         }
-
         try {
-            val product = Product(addproduct.product_id,addproduct.product_name,
+            /*val product = Product(addproduct.product_id,addproduct.product_name,
             addproduct.product_desc,addproduct.cate_name,addproduct.color,addproduct.brand_id,
-            Mobile = addproduct.Mobile, Accessories = addproduct.Accessories)
-            productDB.addproduct(product)
+            Mobile = addproduct.Mobile, Accessories = addproduct.Accessories) */
+            productDB.addproduct(add_product)
             call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Added"))
+            return@post
         }
         catch (e : Exception)
         {
-            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+            call.respond(HttpStatusCode.OK,Simple_Response(false,"${e.message}"))
         }
 
         // Product Is Already in database
-        val exist = productDB.productExists(addproduct.product_id)
+        val exist = productDB.productExists(add_product.product_id)
         if (exist)
         {
             call.respond(HttpStatusCode.OK,Simple_Response(false,"This product is already in the database"))
             return@post
         }
+
     }
 
     // Update Product Details
@@ -182,6 +185,33 @@ fun Route.Product_Route(
                     call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
              }
      }
+
+    post("profileImage/upload") {
+        val data = try {
+            call.receiveMultipart()
+        }catch (e : Exception){
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Image not provided"))
+            return@post
+        }
+
+        try {
+            data.forEachPart {
+                if(it is PartData.FileItem && it.contentType!=null){
+
+                    val fileName = "image${System.currentTimeMillis()}.${it.contentType?.contentSubtype}"
+                    val path = "src/storage/images/"+fileName
+                    val file = File(path)
+                    val fileBytes = it.streamProvider().readBytes()
+                    file.writeBytes(fileBytes)
+                    call.respond(HttpStatusCode.OK,Simple_Response(true,"http://localhost:8007/storage/images/$fileName"))
+                }
+            }
+
+        }catch (e : Exception){
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"$e"))
+        }
+    }
+
 
 }
 

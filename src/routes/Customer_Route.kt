@@ -52,7 +52,7 @@ fun Route.Customer_Route(
                     registerRequest.phone_no,registerRequest.cust_address,registerRequest.delivery_address,
                     registerRequest.pincode)
                 custDb.addCustomer(customer)
-                call.respond(HttpStatusCode.OK,Simple_Response(true,jwtService.generateCustomerToken(customer)))
+                call.respond(HttpStatusCode.OK,Simple_Response(true,"Registration Successfully"))
             }
             catch (e:Exception)
             {

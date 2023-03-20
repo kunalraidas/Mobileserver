@@ -5,7 +5,6 @@ import com.example.data.table.BrandTable
 import com.example.repository.Database_Factory.dbQuery
 import org.jetbrains.exposed.sql.*
 
-
 class Brand_Repo
 {
     suspend fun addBrand(brand: Brand){

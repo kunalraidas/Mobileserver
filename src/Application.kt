@@ -15,7 +15,9 @@ import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.gson.*
 import io.ktor.features.*
+import io.ktor.http.content.*
 import io.ktor.locations.*
+import java.io.File
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -28,6 +30,7 @@ fun Application.module(testing: Boolean = false) {
     val customerDB = Customer_Repo()
     val adminDB = Admin_Repo()
     val brandDB = Brand_Repo()
+    val cateDB = Category_Repo()
     val cartDB = Cart_Repo()
     val colorDB = Color_Repo()
     val discountDB = Discount_Repo()
@@ -69,12 +72,31 @@ fun Application.module(testing: Boolean = false) {
     }
 
     routing {
+
+        //for sending files to client
+        static("storage/images"){
+            staticRootFolder = File("src/storage/images")
+            files(".")
+        }
+        static("/files"){
+            staticRootFolder = File("src/storage/files")
+            files(".")
+        }
+        static("/fonts"){
+            staticRootFolder = File("src/storage/files/fonts")
+            files(".")
+        }
+        static("/chat/images"){
+            staticRootFolder = File("src/storage/chats/images")
+            files(".")
+        }
         get("/") {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
         Admin_Route(adminDB,jwtService,hashFunction)
         Brand_Route(brandDB)
+        Category_Route(cateDB)
         Customer_Route(customerDB,jwtService,hashFunction)
         Colour_Route(colorDB)
         Cart_Route(cartDB)
