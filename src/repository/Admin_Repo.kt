@@ -1,8 +1,12 @@
 package com.example.repository
 
 import com.example.data.model.Admin
+import com.example.data.response.Simple_Response
 import com.example.data.table.AdminTable
 import com.example.repository.Database_Factory.dbQuery
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.response.*
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -20,7 +24,7 @@ class Admin_Repo
         }
     }
 
-    suspend fun findAdminByEmail(email : String) = dbQuery {
+    suspend fun findAdminByEmail(email : String) : Admin? = dbQuery {
 
             AdminTable.select { AdminTable.Admin_email.eq(email) }
                 .map {
@@ -29,10 +33,14 @@ class Admin_Repo
     }
 
     private fun rowToAdmin(row: ResultRow):Admin?{
+        if (row  == null) {
+            return null
+        }
         return Admin(
             admin_name = row[AdminTable.Admin_name],
             admin_email = row[AdminTable.Admin_email],
             admin_password = row[AdminTable.Admin_password]
         )
     }
+
 }

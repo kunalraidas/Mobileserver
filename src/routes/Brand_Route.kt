@@ -11,8 +11,7 @@ import io.ktor.routing.*
 
 fun Route.Brand_Route(
     brandDb : Brand_Repo
-)
-{
+) {
     post("brand/add") {
         val brandAdd = try {
             call.receive<Brand>()
@@ -64,8 +63,6 @@ fun Route.Brand_Route(
             call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
-
-
 
     delete("brand/delete") {
         val brand = try {

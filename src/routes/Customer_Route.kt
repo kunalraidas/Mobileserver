@@ -127,27 +127,6 @@ fun Route.Customer_Route(
             }
         }
 
-        // Get one  Customer Details
-        get ("customer/get"){
-
-            val email = try {
-                call.request.queryParameters["email"]
-            }
-            catch (e : Exception)
-            {
-                call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Provide Email"))
-                return@get
-            }
-
-            try {
-                val u = custDb.findCustomerByEmail(email!!)
-                call.respond(HttpStatusCode.OK,u!!)
-            }
-            catch (e : Exception)
-            {
-                call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
-            }
-        }
 
        // Get All Customer Detail
         get("customer/getAll") {
@@ -160,5 +139,26 @@ fun Route.Customer_Route(
                 call.respond(HttpStatusCode.NoContent,e.message.toString())
              }
         }
+
+    // Get one  Customer Details
+    get ("customer/get"){
+        val email = try {
+            call.request.queryParameters["email"]
+        }
+        catch (e : Exception) {
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Provide Email"))
+            return@get
+        }
+        try {
+            val u = custDb.findCustomerByEmail(email!!)
+            call.respond(HttpStatusCode.OK,u!!)
+        }
+        catch (e : Exception) {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+    }
+
 }
+
+
 

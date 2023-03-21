@@ -23,7 +23,7 @@ class Product_Repo
                 pt[ProductTable.Product_name] = product.product_name
                 pt[ProductTable.Product_desc] = product.product_desc
                 pt[ProductTable.Brand_id] = product.brand_id
-                pt[ProductTable.Cate_name] = product.cate_name
+                pt[ProductTable.Cate_name] = product.cate_id
             }
             product.productColor.forEach()
             {
@@ -157,7 +157,7 @@ class Product_Repo
             product_id = row[ProductTable.Product_id],
             product_name = row[ProductTable.Product_name],
             product_desc = row[ProductTable.Product_desc],
-            cate_name =  row[ProductTable.Cate_name],
+            cate_id =  row[ProductTable.Cate_name],
             productColor = productColor,
             brand_id = row[ProductTable.Brand_id],
             Mobile = mobile,
@@ -191,7 +191,7 @@ class Product_Repo
                 pu[ProductTable.Product_id] = product.product_id
                 pu[ProductTable.Product_name] = product.product_name
                 pu[ProductTable.Product_desc] = product.product_desc
-                pu[ProductTable.Cate_name] = product.cate_name
+                pu[ProductTable.Cate_name] = product.cate_id
             }
 
             product.productColor.forEach()

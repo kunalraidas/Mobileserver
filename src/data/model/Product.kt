@@ -4,7 +4,7 @@ data class Product(
     val product_id: Int,
     val product_name: String,
     val product_desc: String,
-    val cate_name: String,
+    val cate_id: Int,
     val productColor: List<ProductColor>,
     val brand_id: Int,
     var Mobile: List<Mobile>? = null,

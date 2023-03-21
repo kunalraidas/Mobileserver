@@ -23,17 +23,17 @@ class Customer_Repo{
     }
 
     // Find Customer
-    suspend fun findCustomerByEmail(email : String) = dbQuery {
-        CustomerTable.select { CustomerTable.Email.eq(email) }
-            .map {
-                rowToCustomer(it) }
-            .singleOrNull()
+    suspend fun findCustomerByEmail(email : String) : Customer? = dbQuery {
+        CustomerTable.select {
+            CustomerTable.Email.eq(email)
+        }.map {
+                rowToCustomer(it)
+            }.singleOrNull()
     }
 
     // Customer Details in row
     private fun rowToCustomer(row: ResultRow?):Customer?{
-        if (row == null)
-        {
+        if (row == null) {
             return null
         }
         return Customer(

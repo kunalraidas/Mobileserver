@@ -89,4 +89,38 @@ fun Route.Admin_Route(
         }
     }
 
+    get("admin/get")  {
+        val email = try {
+            call.request.queryParameters["email"]
+        }
+        catch (e : Exception) {
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Please provide a email"))
+            return@get
+        }
+        try {
+            val a = admindb.findAdminByEmail(email!!)
+            call.respond(HttpStatusCode.OK,a!!)
+        }
+        catch (e : Exception) {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+    }
+
+
+    //    get ("customer/get"){
+//    val email = try {
+//        call.request.queryParameters["email"]
+//    }
+//    catch (e : Exception) {
+//        call.respond(HttpStatusCode.BadRequest, Simple_Response(false,"Provide Email"))
+//        return@get
+//    }
+//    try {
+//        val u = custDb.findCustomerByEmail(email!!)
+//        call.respond(HttpStatusCode.OK,u!!)
+//    }
+//    catch (e : Exception) {
+//        call.respond(HttpStatusCode.Conflict, Simple_Response(false,"${e.message}"))
+//    }
+
 }
