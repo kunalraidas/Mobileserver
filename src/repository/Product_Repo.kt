@@ -113,7 +113,9 @@ class Product_Repo
     }
 
     suspend fun getAllProduct() : List<Product?> = dbQuery {
-        ProductTable.selectAll().map { rowToProduct(it) }
+        ProductTable.selectAll().map {
+            rowToProduct(it)
+        }
     }
 
     suspend fun getAllMobile() : List<Mobile?> = dbQuery {
@@ -143,12 +145,10 @@ class Product_Repo
         CoroutineScope(Dispatchers.IO).launch {
             productColor = getColorByProductId(row[ProductTable.Product_id]).toMutableList()
         }
-
         var mobile = mutableListOf<Mobile>()
         CoroutineScope(Dispatchers.IO).launch {
             mobile = getMobileByProductId(row[ProductTable.Product_id]).toMutableList()
         }
-
         var access = mutableListOf<Accessories>()
         CoroutineScope(Dispatchers.IO).launch {
             access = getAccessByProductId(row[ProductTable.Product_id]).toMutableList()

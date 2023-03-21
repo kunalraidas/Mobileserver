@@ -99,6 +99,13 @@ fun Route.Admin_Route(
         }
         try {
             val a = admindb.findAdminByEmail(email!!)
+            if (a == null) {
+                call.respond(HttpStatusCode.OK,Admin(
+                    admin_name = "",
+                    admin_email = "",
+                    admin_password = ""
+                ))
+            }
             call.respond(HttpStatusCode.OK,a!!)
         }
         catch (e : Exception) {
