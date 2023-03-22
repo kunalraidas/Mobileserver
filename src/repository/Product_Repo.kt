@@ -13,49 +13,46 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 
-class Product_Repo
-{
-    suspend fun addproduct(product: Product)
-    {
+class Product_Repo {
+    suspend fun addproduct(product: Product) {
         dbQuery {
-            ProductTable.insert { pt->
+            ProductTable.insert { pt ->
                 pt[ProductTable.Product_id] = product.product_id
                 pt[ProductTable.Product_name] = product.product_name
                 pt[ProductTable.Product_desc] = product.product_desc
                 pt[ProductTable.Brand_id] = product.brand_id
-                pt[ProductTable.Cate_name] = product.cate_id
+                pt[ProductTable.Cate_id] = product.cate_id
             }
             product.productColor.forEach()
             {
-                ColorTable.insert { ct->
+                ColorTable.insert { ct ->
 //                    ct[ColorTable.Color_id] = it.color_id
                     ct[ColorTable.Color_name] = it.color_name
                     ct[ColorTable.Product_Image] = it.product_image
                     ct[ColorTable.Product_id] = product.product_id
                 }
             }
-            if (product.Mobile != null )
-            {
+            if (product.Mobile != null) {
                 product.Mobile!!.forEach()
                 {
-                         MobileTable.insert { mt->
+                    MobileTable.insert { mt ->
                         mt[MobileTable.Mobile_id] = it.mobile_id
                         mt[MobileTable.Product_id] = product.product_id
                         mt[MobileTable.Ram] = it.ram
                         mt[MobileTable.Storage] = it.storage
                         mt[MobileTable.Price] = it.price
+                        mt[MobileTable.quentity] = it.quentity
                     }
                 }
-            }
-            else
-            {
+            } else {
                 product.Accessories?.forEach()
                 {
-                    AccessoriesTable.insert { at->
+                    AccessoriesTable.insert { at ->
                         at[AccessoriesTable.Access_id] = it.access_id
                         at[AccessoriesTable.Product_id] = product.product_id
                         at[AccessoriesTable.Specification] = it.specification
                         at[AccessoriesTable.Price] = it.price
+                        at[AccessoriesTable.quentity] = it.quentity
                     }
                 }
             }
@@ -63,8 +60,7 @@ class Product_Repo
     }
 
 
-
-    fun getOneProduct(id : Int) = transaction {
+    fun getOneProduct(id: Int) = transaction {
         ProductTable.select {
             ProductTable.Product_id.eq(id)
         }.map {
@@ -72,39 +68,39 @@ class Product_Repo
         }.singleOrNull()
     }
 
-    suspend fun getColorByProductId(id :Int) : List<ProductColor> = dbQuery {
-        ColorTable.select {
+    fun getColorByProductId(id: Int): List<ProductColor> {
+        return ColorTable.select {
             ColorTable.Product_id.eq(id)
         }.map {
             rowToColor(it)
         }
     }
 
-    suspend fun getMobileByProductId(id : Int) : List<Mobile> = dbQuery {
-        MobileTable.select {
+    fun getMobileByProductId(id: Int): List<Mobile> {
+        return MobileTable.select {
             MobileTable.Product_id.eq(id)
         }.map {
             rowToMobile(it)
         }
     }
 
-    suspend fun getAccessByProductId(id : Int) : List<Accessories> = dbQuery {
-        AccessoriesTable.select {
+    fun getAccessByProductId(id: Int): List<Accessories> {
+        return AccessoriesTable.select {
             AccessoriesTable.Product_id.eq(id)
         }.map {
             rowToAccessories(it)
         }
     }
 
-    suspend fun getMobileProductByMobileId(id : Int) = dbQuery {
+    suspend fun getMobileProductByMobileId(id: Int) = dbQuery {
         MobileTable.select {
             MobileTable.Mobile_id.eq(id)
         }.map {
-                rowToMobile(it)
+            rowToMobile(it)
         }.singleOrNull()
     }
 
-    suspend fun getAccessoriesProductByAccessId(id : Int) = dbQuery {
+    suspend fun getAccessoriesProductByAccessId(id: Int) = dbQuery {
         AccessoriesTable.select {
             AccessoriesTable.Access_id.eq(id)
         }.map {
@@ -112,142 +108,152 @@ class Product_Repo
         }.singleOrNull()
     }
 
-    suspend fun getAllProduct() : List<Product?> = dbQuery {
+    suspend fun getAllProduct(): List<Product?> = dbQuery {
         ProductTable.selectAll().map {
             rowToProduct(it)
         }
     }
 
-    suspend fun getAllMobile() : List<Mobile?> = dbQuery {
+    suspend fun getAllMobile(): List<Mobile?> = dbQuery {
         MobileTable.selectAll().map {
             rowToMobile(it)
         }
     }
 
-    suspend fun getAllAccessories() : List<Accessories?> = dbQuery {
+    suspend fun getAllAccessories(): List<Accessories?> = dbQuery {
         AccessoriesTable.selectAll().map {
             rowToAccessories(it)
         }
     }
 
 
-    private fun rowToColor(row: ResultRow): ProductColor{
-       return ProductColor(
-           color_id = row[ColorTable.Color_id],
-           color_name = row[ColorTable.Color_name],
-           product_image = row[ColorTable.Product_Image]
-       )
+    private fun rowToColor(row: ResultRow): ProductColor {
+        return ProductColor(
+            color_id = row[ColorTable.Color_id],
+            color_name = row[ColorTable.Color_name],
+            product_image = row[ColorTable.Product_Image]
+        )
     }
 
-    private fun rowToProduct(row: ResultRow) : Product{
+    private fun rowToProduct(row: ResultRow): Product {
 
         var productColor = mutableListOf<ProductColor>()
-        CoroutineScope(Dispatchers.IO).launch {
-            productColor = getColorByProductId(row[ProductTable.Product_id]).toMutableList()
-        }
+        productColor = getColorByProductId(row[ProductTable.Product_id]).toMutableList()
+
         var mobile = mutableListOf<Mobile>()
-        CoroutineScope(Dispatchers.IO).launch {
-            mobile = getMobileByProductId(row[ProductTable.Product_id]).toMutableList()
-        }
-        var access = mutableListOf<Accessories>()
-        CoroutineScope(Dispatchers.IO).launch {
-            access = getAccessByProductId(row[ProductTable.Product_id]).toMutableList()
-        }
+        mobile = getMobileByProductId(row[ProductTable.Product_id]).toMutableList()
+
+        var accessories = mutableListOf<Accessories>()
+        accessories = getAccessByProductId(row[ProductTable.Product_id]).toMutableList()
+
         return Product(
             product_id = row[ProductTable.Product_id],
             product_name = row[ProductTable.Product_name],
             product_desc = row[ProductTable.Product_desc],
-            cate_id =  row[ProductTable.Cate_name],
+            cate_id = row[ProductTable.Cate_id],
             productColor = productColor,
             brand_id = row[ProductTable.Brand_id],
             Mobile = mobile,
-            Accessories = access
+            Accessories = accessories
         )
     }
 
-    private fun rowToMobile(row: ResultRow) : Mobile{
+//        var productColor = mutableListOf<ProductColor>()
+//        CoroutineScope(Dispatchers.IO).launch {
+//            productColor = getColorByProductId(row[ProductTable.Product_id]).toMutableList()
+//        }
+//        var mobile = mutableListOf<Mobile>()
+//        CoroutineScope(Dispatchers.IO).launch {
+//            mobile = getMobileByProductId(row[ProductTable.Product_id]).toMutableList()
+//        }
+//        var access = mutableListOf<Accessories>()
+//        CoroutineScope(Dispatchers.IO).launch {
+//            access = getAccessByProductId(row[ProductTable.Product_id]).toMutableList()
+//        }
+
+
+    private fun rowToMobile(row: ResultRow): Mobile {
 
         return Mobile(
             mobile_id = row[MobileTable.Mobile_id],
             product_id = row[MobileTable.Product_id],
             ram = row[MobileTable.Ram],
             storage = row[MobileTable.Storage],
-            price = row[MobileTable.Price]
+            price = row[MobileTable.Price],
+            quentity = row[MobileTable.quentity]
         )
     }
 
-    private fun rowToAccessories(row: ResultRow) : Accessories{
+    private fun rowToAccessories(row: ResultRow): Accessories {
 
-            return Accessories(
-                access_id = row[AccessoriesTable.Access_id],
-                specification = row[AccessoriesTable.Specification],
-                price = row[AccessoriesTable.Price]
-            )
-        }
+        return Accessories(
+            access_id = row[AccessoriesTable.Access_id],
+            specification = row[AccessoriesTable.Specification],
+            price = row[AccessoriesTable.Price],
+            quentity = row[AccessoriesTable.quentity]
+        )
+    }
 
     suspend fun updateProduct(product: Product) {
         dbQuery {
-            ProductTable.update(where = { ProductTable.Product_id.eq(product.product_id) } ){ pu->
+            ProductTable.update(where = { ProductTable.Product_id.eq(product.product_id) }) { pu ->
                 pu[ProductTable.Product_id] = product.product_id
                 pu[ProductTable.Product_name] = product.product_name
                 pu[ProductTable.Product_desc] = product.product_desc
-                pu[ProductTable.Cate_name] = product.cate_id
+                pu[ProductTable.Cate_id] = product.cate_id
             }
 
             product.productColor.forEach()
             {
-                ColorTable.update(where = {ColorTable.Color_id.eq(it.color_id)}) { ct->
+                ColorTable.update(where = { ColorTable.Color_id.eq(it.color_id) }) { ct ->
                     ct[ColorTable.Product_id] = product.product_id
                     ct[ColorTable.Color_name] = it.color_name
                     ct[ColorTable.Product_Image] = it.product_image
+
                 }
             }
 
-            if (product.Mobile != null)
-            {
+            if (product.Mobile != null) {
                 product.Mobile!!.forEach()
                 {
-                    MobileTable.update(where = {MobileTable.Mobile_id.eq(it.mobile_id)}) { mt->
+                    MobileTable.update(where = { MobileTable.Mobile_id.eq(it.mobile_id) }) { mt ->
                         mt[MobileTable.Product_id] = product.product_id
                         mt[MobileTable.Ram] = it.ram
                         mt[MobileTable.Storage] = it.storage
                         mt[MobileTable.Price] = it.price
+                        mt[MobileTable.quentity] = it.quentity
                     }
                 }
-            }
-            else
-            {
+            } else {
                 product.Accessories?.forEach()
                 {
-                    AccessoriesTable.update(where = {AccessoriesTable.Access_id.eq(it.access_id)}){ at->
+                    AccessoriesTable.update(where = { AccessoriesTable.Access_id.eq(it.access_id) }) { at ->
                         at[AccessoriesTable.Product_id] = product.product_id
                         at[AccessoriesTable.Specification] = it.specification
                         at[AccessoriesTable.Price] = it.price
+                        at[AccessoriesTable.quentity] = it.quentity
                     }
                 }
             }
         }
     }
 
-    suspend fun deleteProduct(product: Int) : Int
-    {
-       return dbQuery {
+    suspend fun deleteProduct(product: Int): Int {
+        return dbQuery {
 
-           ColorTable.deleteWhere { ColorTable.Product_id.eq(product) }
+            ColorTable.deleteWhere { ColorTable.Product_id.eq(product) }
 
-           MobileTable.deleteWhere {MobileTable.Product_id.eq(product) }
+            MobileTable.deleteWhere { MobileTable.Product_id.eq(product) }
 
-           AccessoriesTable.deleteWhere { AccessoriesTable.Product_id.eq(product) }
+            AccessoriesTable.deleteWhere { AccessoriesTable.Product_id.eq(product) }
 
-           ProductTable.deleteWhere { ProductTable.Product_id.eq(product) }
+            ProductTable.deleteWhere { ProductTable.Product_id.eq(product) }
 
-       }
+        }
     }
 
-    suspend fun productExists(id : Int) = dbQuery {
-            ProductTable.select { ProductTable.Product_id.eq(id) }.count() == 1L
-        }
-
+    suspend fun productExists(id: Int) = dbQuery {
+        ProductTable.select { ProductTable.Product_id.eq(id) }.count() == 1L
+    }
 
 }
-

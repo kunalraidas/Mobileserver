@@ -17,6 +17,8 @@ class Accessories_Repo
                 at[AccessoriesTable.Access_id] = accessories.access_id
                 at[AccessoriesTable.Product_id] = Product_id
                 at[AccessoriesTable.Specification] = accessories.specification
+                at[AccessoriesTable.Price] = accessories.price
+                at[AccessoriesTable.quentity] = accessories.quentity
             }
         }
     }
@@ -34,7 +36,8 @@ class Accessories_Repo
         return Accessories(
             access_id = row[AccessoriesTable.Access_id],
             specification = row[AccessoriesTable.Specification],
-            price = row[AccessoriesTable.Price]
+            price = row[AccessoriesTable.Price],
+            quentity = row[AccessoriesTable.quentity]
         )
     }
 

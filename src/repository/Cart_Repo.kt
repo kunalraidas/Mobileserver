@@ -10,15 +10,12 @@ class Cart_Repo
 {
     suspend fun addtocart(email : String, product: Product, qty : Int) = dbQuery {
            var p = 0f
-            if (product.Mobile != null)
-            {
+            if (product.Mobile != null) {
                 p = product.Mobile!![0].price
             }
-           else
-            {
+           else {
                 p = product.Accessories!![0].price
             }
-
             CartTable.insert { c->
                 c[CartTable.Email] = email
                 c[CartTable.Product_id] = product.product_id

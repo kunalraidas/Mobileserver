@@ -44,7 +44,6 @@ fun Route.Product_Route(
             call.respond(HttpStatusCode.OK,Simple_Response(false,"This product is already in the database"))
             return@post
         }
-
     }
 
     // Update Product Details
@@ -212,8 +211,8 @@ fun Route.Product_Route(
         }
     }
 
-
 }
+
 
 
 

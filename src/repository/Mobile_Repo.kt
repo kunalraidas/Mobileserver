@@ -36,7 +36,8 @@ class Mobile_Repo
             product_id = row[MobileTable.Product_id],
             ram = row[MobileTable.Ram],
             storage = row[MobileTable.Storage],
-            price = row[MobileTable.Price]
+            price = row[MobileTable.Price],
+            quentity = row[MobileTable.quentity]
         )
     }
 

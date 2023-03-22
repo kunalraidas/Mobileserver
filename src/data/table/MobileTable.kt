@@ -10,6 +10,7 @@ object MobileTable : Table()
     val Ram = varchar("Ram",30)
     val Storage = varchar("Storage",30)
      val Price = float("Price")
+    val quentity = integer("quentity")
 
     override val primaryKey: PrimaryKey = PrimaryKey(Mobile_id)
 
