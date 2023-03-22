@@ -28,6 +28,14 @@ fun Route.Cart_Route(CartDb: Cart_Repo){
             return@post
         }
 
+        val mid = call.request.queryParameters["mobile_id"]?.toInt()
+
+        val cid = call.request.queryParameters["color_id"]?.toInt()
+
+
+        val asid = call.request.queryParameters["access_id"]?.toInt()
+
+
         val product = try {
             call.receive<Product>()
         }catch (e:Exception){
@@ -36,7 +44,7 @@ fun Route.Cart_Route(CartDb: Cart_Repo){
         }
 
         try{
-            CartDb.addtocart(email!!,product ,qty!!)
+            CartDb.addtocart(email!!,product ,qty!!,mid, cid, asid)
             call.respond(HttpStatusCode.OK,Simple_Response(true,"Cart Added SuccessFully"))
         }catch (e : Exception){
             call.respond(HttpStatusCode.NotAcceptable,Simple_Response(false,e.message.toString()))
@@ -77,14 +85,14 @@ fun Route.Cart_Route(CartDb: Cart_Repo){
         }
     }
 
-    delete("cart/delete") {
+    post("cart/delete") {
         val cartId = try {
             call.request.queryParameters["cart_id"]?.toInt()
         }
         catch (e : Exception)
         {
             call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
-            return@delete
+            return@post
         }
 
         try {

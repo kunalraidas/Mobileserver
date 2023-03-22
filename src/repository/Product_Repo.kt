@@ -13,7 +13,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 
-class Product_Repo {
+open class Product_Repo {
     suspend fun addproduct(product: Product) {
         dbQuery {
             ProductTable.insert { pt ->
@@ -137,14 +137,13 @@ class Product_Repo {
 
     private fun rowToProduct(row: ResultRow): Product {
 
-        var productColor = mutableListOf<ProductColor>()
-        productColor = getColorByProductId(row[ProductTable.Product_id]).toMutableList()
+      //  var productColor = mutableListOf<ProductColor>()
+        val  productColor = getColorByProductId(row[ProductTable.Product_id]).toMutableList()
 
-        var mobile = mutableListOf<Mobile>()
-        mobile = getMobileByProductId(row[ProductTable.Product_id]).toMutableList()
+//        var mobile = mutableListOf<Mobile>()
+        val mobile = getMobileByProductId(row[ProductTable.Product_id]).toMutableList()
 
-        var accessories = mutableListOf<Accessories>()
-        accessories = getAccessByProductId(row[ProductTable.Product_id]).toMutableList()
+        val accessories = getAccessByProductId(row[ProductTable.Product_id]).toMutableList()
 
         return Product(
             product_id = row[ProductTable.Product_id],

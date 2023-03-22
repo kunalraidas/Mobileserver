@@ -24,6 +24,14 @@ class Category_Repo
         }.singleOrNull()
     }
 
+    suspend fun getCategoryById(id : Int) = dbQuery {
+        CategoryTable.select{
+            CategoryTable.cate_id.eq(id)
+        }.map {
+            rowToCategory(it)
+        }.singleOrNull()
+    }
+
     suspend fun getAllCategoryName() : List<Category?> = dbQuery {
         CategoryTable.selectAll().map {
             rowToCategory(it)

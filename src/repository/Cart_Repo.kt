@@ -5,10 +5,11 @@ import com.example.data.model.Product
 import com.example.data.table.CartTable
 import com.example.repository.Database_Factory.dbQuery
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 
-class Cart_Repo
+class Cart_Repo : Product_Repo()
 {
-    suspend fun addtocart(email : String, product: Product, qty : Int) = dbQuery {
+    suspend fun addtocart(email : String, product: Product, qty : Int,mid : Int? = null,cid : Int? = null,asid : Int? = null) = dbQuery {
            var p = 0f
             if (product.Mobile != null) {
                 p = product.Mobile!![0].price
@@ -16,12 +17,41 @@ class Cart_Repo
            else {
                 p = product.Accessories!![0].price
             }
-            CartTable.insert { c->
-                c[CartTable.Email] = email
-                c[CartTable.Product_id] = product.product_id
-                c[CartTable.Quentity] = qty
-                c[CartTable.TotalPrice] = qty * p
-             }
+
+            val c = CartTable.select(where = {
+                CartTable.Email.eq(email) and CartTable.Product_id.eq(product.product_id)
+            }).count().toInt()
+
+            if(c>=1){
+                var q = getQuantity(email,product.product_id)
+
+                CartTable.update(where = {CartTable.Email.eq(email) and  CartTable.Product_id.eq(product.product_id)}){c->
+                    if (q != null) {
+                        c[CartTable.Quentity] = q +1
+                    }
+                }
+            }else{
+                CartTable.insert { c->
+                    c[CartTable.Email] = email
+                    c[CartTable.Product_id] = product.product_id
+                    c[CartTable.Quentity] = qty
+                    c[CartTable.TotalPrice] = qty * p
+                    if(mid != null && cid !=null)
+                    {
+                        c[CartTable.mobile_id] = mid
+                        c[CartTable.color_id] = cid
+                    }else if(asid != null){
+                        c[CartTable.access_id] = asid
+                    }
+
+                }
+            }
+
+    }
+    fun getQuantity(email : String,pid : Int) : Int? = transaction {
+        CartTable.slice(CartTable.Quentity).select {CartTable.Email.eq(email) and CartTable.Product_id.eq(pid)}.map {
+            it[CartTable.Quentity]
+        }.singleOrNull()
     }
     suspend fun removeformCart(id: Int) = dbQuery{
         CartTable.deleteWhere {
@@ -79,12 +109,17 @@ class Cart_Repo
 
     private fun rowToCart(row: ResultRow) : Cart
     {
+        val c = getOneProduct(row[CartTable.Product_id])
         return Cart(
             cart_id = row[CartTable.Cart_id],
             email = row[CartTable.Email],
             product_id = row[CartTable.Product_id],
             quentity = row[CartTable.Quentity],
-            total_price = row[CartTable.TotalPrice]
+            total_price = row[CartTable.TotalPrice],
+            mobile_id = row[CartTable.mobile_id],
+            accessories_id = row[CartTable.access_id],
+            color_id = row[CartTable.color_id],
+            product = c
         )
     }
 }

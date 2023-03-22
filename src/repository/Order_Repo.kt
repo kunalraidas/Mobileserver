@@ -151,7 +151,10 @@ class Order_Repo {
             orderItems = orderList,
             quantity = ids.size,
             deliveryCharge = row[OrderTable.deliveryCharge],
-            totalrecived = row[OrderTable.total_received]
+            totalrecived = row[OrderTable.total_received],
+            mobile_id = row[OrderTable.mobile_id],
+            accessories_id = row[OrderTable.access_id],
+            color_id = row[OrderTable.color_id]
         )
     }
 

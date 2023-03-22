@@ -17,6 +17,9 @@ data class Order(
     val total : Float,
     val discount : Float = 0.0f,
     val deliveryCharge : Float,
-    val totalrecived : Float
+    val totalrecived : Float,
+    val mobile_id : Int? = null,
+    val color_id : Int? = null,
+    val accessories_id : Int? = null,
 
 )

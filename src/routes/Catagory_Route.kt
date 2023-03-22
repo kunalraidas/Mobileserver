@@ -35,9 +35,27 @@ fun Route.Category_Route(
         }
     }
 
+    get("category/get-category-id") {
+        val categoryid = try {
+            call.request.queryParameters["cate_id"]?.toInt()
+        }
+        catch(e : Exception) {
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
+            return@get
+        }
+        try {
+            val c = cateDb.getCategoryById(categoryid!!)
+            call.respond(HttpStatusCode.OK,c!!)
+        }
+        catch (e : Exception)
+        {
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
+        }
+    }
+
     get("category/get-category-name") {
         val categoryName = try {
-            call.request.queryParameters["cate_id"]
+            call.request.queryParameters["cate_name"]
         }
         catch(e : Exception) {
             call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
