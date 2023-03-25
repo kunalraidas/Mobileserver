@@ -3,15 +3,11 @@ package com.example.repository
 import com.example.data.model.Cart
 import com.example.data.model.Order
 import com.example.data.model.OrderItem
-import com.example.data.table.CartTable
-import com.example.data.table.OrderTable
-import com.example.data.table.OrderUserTable
-import com.example.data.table.Order_Product_table
+import com.example.data.table.*
 import com.example.repository.Database_Factory.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.LocalDate
-
 
 //import com.example.data
 
@@ -116,6 +112,14 @@ class Order_Repo {
         }
     }
 
+    suspend fun getProductByOrderId(id : String) = dbQuery {
+        OrderTable.select{
+           OrderTable.order_id.eq(id)
+        }.map {
+            rowToOrder(it)
+        }.singleOrNull()
+    }
+
     suspend fun filterOrder(startDate : LocalDate,endDate : LocalDate) : List<Order> = dbQuery {
         OrderTable.select {
             OrderTable.order_date.between(startDate,endDate)
@@ -139,7 +143,6 @@ class Order_Repo {
                 )
             )
         }
-
         return  Order(
             order_id = row[OrderTable.order_id],
             Email = row[OrderTable.email],

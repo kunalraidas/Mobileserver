@@ -108,6 +108,14 @@ open class Product_Repo {
         }.singleOrNull()
     }
 
+    suspend fun getProductByCategoryId(id : Int) = dbQuery {
+        ProductTable.select{
+            ProductTable.Cate_id.eq(id)
+        }.map {
+            rowToProduct(it)
+        }
+    }
+
     suspend fun getAllProduct(): List<Product?> = dbQuery {
         ProductTable.selectAll().map {
             rowToProduct(it)
@@ -239,15 +247,10 @@ open class Product_Repo {
 
     suspend fun deleteProduct(product: Int): Int {
         return dbQuery {
-
             ColorTable.deleteWhere { ColorTable.Product_id.eq(product) }
-
             MobileTable.deleteWhere { MobileTable.Product_id.eq(product) }
-
             AccessoriesTable.deleteWhere { AccessoriesTable.Product_id.eq(product) }
-
             ProductTable.deleteWhere { ProductTable.Product_id.eq(product) }
-
         }
     }
 

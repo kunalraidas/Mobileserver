@@ -54,8 +54,7 @@ fun Route.Order_Route(
         val order = try {
             call.receive<Order>()
         }
-        catch (e : Exception)
-        {
+        catch (e : Exception) {
             call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
             return@post
         }
@@ -64,31 +63,26 @@ fun Route.Order_Route(
             orderdb.updateStatus(order)
             call.respond(HttpStatusCode.OK,Simple_Response(true,"Status Update"))
         }
-        catch (e : Exception)
-        {
+        catch (e : Exception) {
             call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
 
     post("order/status") {
-
         val status = try {
             call.request.queryParameters["status"]!!.toInt()
         }
-        catch (e : Exception)
-        {
+        catch (e : Exception) {
             call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Please Provide Status"))
             return@post
         }
 
         try {
             val order = orderdb.getOrderByStatus(status)
-            if (order.isEmpty())
-            {
+            if (order.isEmpty()) {
                 call.respond(HttpStatusCode.NotFound,Simple_Response(false,"No order in this status $order"))
             }
-            else
-            {
+            else {
                 call.respond(HttpStatusCode.OK,Simple_Response(true,"Done$order"))
             }
         }catch (e : Exception)
@@ -97,26 +91,23 @@ fun Route.Order_Route(
         }
     }
 
-    get("order/id") {
+    post("order/id") {
         val id = try {
             call.request.queryParameters["id"]!!
         }catch (e : Exception)
         {
             call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
-            return@get
+            return@post
         }
         try {
             val order = orderdb.getOrderById(id)
-            if (order == null)
-            {
+            if (order == null) {
                 call.respond(HttpStatusCode.NotFound,Simple_Response(false, "No Order Found$order"))
-            }
-            else{
-                call.respond(HttpStatusCode.OK,Simple_Response(true,"Done$order"))
+            } else{
+                call.respond(HttpStatusCode.OK,order)
             }
         }
-        catch (e : Exception)
-        {
+        catch (e : Exception) {
             call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
         }
     }
@@ -146,6 +137,24 @@ fun Route.Order_Route(
             call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
         }
     }
+
+    post("order/productId") {
+        val id = try {
+            call.request.queryParameters["order_id"]
+        }catch (e : Exception){
+            call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Enter Order id "))
+            return@post
+        }
+        try {
+            val product_id = orderdb.getProductByOrderId(id!!)
+            call.respond(HttpStatusCode.OK,product_id!!)
+        }
+        catch (e : Exception){
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"$e"))
+        }
+    }
+
+
 
    post("order/filter") {
        val date = try {

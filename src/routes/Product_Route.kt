@@ -165,22 +165,20 @@ fun Route.Product_Route(
     }
 
     // Delete Product Details
-    delete("product/delete") {
+    post("product/delete") {
             val productId = try {
-                call.request.queryParameters["id"]?.toInt()
+                call.request.queryParameters["Product_id"]?.toInt()
             }
-            catch (e : Exception)
-            {
+            catch (e : Exception){
                 call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
-                return@delete
+                return@post
             }
             try {
-                     val product = productDB.deleteProduct(productId!!)
-                     //      call.respond(HttpStatusCode.OK,product)
-                     call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Deleted successfully"))
+                val product = productDB.deleteProduct(productId!!)
+                call.respond(HttpStatusCode.OK,Simple_Response(true,"Product Deleted successfully"))
+//                call.respond(HttpStatusCode.OK,product)
             }
-             catch (e : Exception)
-             {
+             catch (e : Exception) {
                     call.respond(HttpStatusCode.Conflict,Simple_Response(false,"${e.message}"))
              }
      }
@@ -208,6 +206,23 @@ fun Route.Product_Route(
 
         }catch (e : Exception){
             call.respond(HttpStatusCode.Conflict,Simple_Response(false,"$e"))
+        }
+    }
+
+    get("product/categoryId") {
+            val id = try {
+                call.request.queryParameters["cate_id"]?.toInt()
+            }
+            catch (e : Exception){
+                call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"Enter Category id"))
+                return@get
+            }
+        try {
+            val cate_id = productDB.getProductByCategoryId(id!!)
+            call.respond(HttpStatusCode.OK,cate_id)
+        }
+        catch (e : Exception){
+            call.respond(HttpStatusCode.Conflict,Simple_Response(false,"Some Problem ${e.message}"))
         }
     }
 
