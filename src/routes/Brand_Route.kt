@@ -64,14 +64,14 @@ fun Route.Brand_Route(
         }
     }
 
-    delete("brand/delete") {
+    post("brand/delete") {
         val brand = try {
             call.request.queryParameters["brand_id"]?.toInt()
         }
         catch (e : Exception)
         {
             call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
-            return@delete
+            return@post
         }
 
         try {

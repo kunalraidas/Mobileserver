@@ -16,9 +16,7 @@ object OrderTable : Table()
      val discount = float("discount")
       val deliveryCharge = float("delivery_Charge")
      val total_received = float("total_received")
-     val mobile_id = reference("Mobile_id",MobileTable.Mobile_id).nullable()
-     val access_id = reference("Access_id",AccessoriesTable.Access_id).nullable()
-     val color_id = reference("color_id",ColorTable.Color_id).nullable()
+
 
     override val primaryKey: PrimaryKey = PrimaryKey(order_id)
 }

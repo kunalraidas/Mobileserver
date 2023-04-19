@@ -40,6 +40,9 @@ class Order_Repo {
                     op[Order_Product_table.product_id] = it.product_id
                     op[Order_Product_table.quentity] =  it.quentity
                     op[Order_Product_table.total_price] = it.total_price
+                    op[Order_Product_table.mobile_id] = it.mobile_id
+                    op[Order_Product_table.color_id] = it.color_id
+                    op[Order_Product_table.access_id] = it.accessories_id
                 }
 
                 items.forEach{
@@ -129,17 +132,23 @@ class Order_Repo {
     }
 
 
+
+
     fun rowToOrder(row: ResultRow):Order{
 
         var orderList = mutableListOf<OrderItem>()
         var ids = getProductIdByOrderId(row[OrderTable.order_id])
 
+
         ids.forEach{
+
+            val totalPrice = getOrderTotalPrice(it,row[OrderTable.order_id])
+            val qty = getOrderQty(it,row[OrderTable.order_id])
             orderList.add(
                 OrderItem(
                     product = Product_Repo().getOneProduct(it),
-                    totalPrice = 0.0f,
-                    quantity = 0
+                    totalPrice = totalPrice,
+                    quantity = qty
                 )
             )
         }
@@ -155,10 +164,28 @@ class Order_Repo {
             quantity = ids.size,
             deliveryCharge = row[OrderTable.deliveryCharge],
             totalrecived = row[OrderTable.total_received],
-            mobile_id = row[OrderTable.mobile_id],
-            accessories_id = row[OrderTable.access_id],
-            color_id = row[OrderTable.color_id]
+
         )
+    }
+
+    private fun getOrderQty(it: Int, s: String): Int {
+        val p = Order_Product_table.slice(Order_Product_table.quentity).select {
+            Order_Product_table.order_id.eq(s) and Order_Product_table.product_id.eq(it)
+        }.map {
+            it[Order_Product_table.quentity]
+        }.single()
+
+        return p
+    }
+
+    private fun getOrderTotalPrice(it: Int, s: String): Float {
+        val p = Order_Product_table.slice(Order_Product_table.total_price).select {
+            Order_Product_table.order_id.eq(s) and Order_Product_table.product_id.eq(it)
+        }.map {
+            it[Order_Product_table.total_price]
+        }.single()
+
+        return p
     }
 
 }
