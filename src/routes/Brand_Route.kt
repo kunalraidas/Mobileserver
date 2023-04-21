@@ -21,7 +21,7 @@ fun Route.Brand_Route(
             call.respond(HttpStatusCode.BadRequest,Simple_Response(false,"${e.message}"))
             return@post
         }
-
+        println(brandAdd)
         try {
             val brand = Brand(brandAdd.brand_id,brandAdd.brand_name)
             brandDb.addBrand(brand)

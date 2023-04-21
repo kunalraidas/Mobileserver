@@ -10,7 +10,7 @@ class Brand_Repo
     suspend fun addBrand(brand: Brand){
        dbQuery {
            BrandTable.insert { bt->
-               bt[BrandTable.brand_id] = brand.brand_id
+             //  bt[BrandTable.brand_id] = brand.brand_id
                bt[BrandTable.brand_name] = brand.brand_name
            }
        }

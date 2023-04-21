@@ -10,7 +10,7 @@ class Category_Repo
     suspend fun addCategory(category: Category){
         dbQuery {
             CategoryTable.insert { ct->
-                ct[cate_id] = category.cate_id
+               // ct[cate_id] = category.cate_id
                 ct[cate_name] = category.cate_name
             }
         }
